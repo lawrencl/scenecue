@@ -1,0 +1,39 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.iml
+*.swp
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Android
+*.apk
+*.aab
+*.keystore
+local.properties
+.gradle/
+build/
+captures/
+
+# iOS
+Pods/
+*.xcworkspace
+DerivedData/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Media scratch — don't commit test footage
+*.mp4
+*.mov
+scratch/

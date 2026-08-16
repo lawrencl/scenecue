@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SceneCue — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#131019;
+    --surface:#1D1926;
+    --surface-2:#26202F;
+    --stub-edge:#2E2739;
+    --gold:#F5B942;
+    --red:#FF5470;
+    --violet:#9B8CFF;
+    --green:#3DDC97;
+    --text:#F5F2EA;
+    --text-dim:#A9A3BB;
+    --text-faint:#6F6A82;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:radial-gradient(circle at 50% 0%, #221D30 0%, #0E0C14 60%);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Manrope', sans-serif;
+    padding:32px 16px;
+  }
+  .device{
+    width:390px;
+    max-width:100%;
+    height:820px;
+    background:var(--ink);
+    border-radius:36px;
+    border:8px solid #06050A;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.03);
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  .statusbar{
+    height:28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 22px;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--text-dim);
+    flex-shrink:0;
+  }
+  .screen{
+    flex:1;
+    overflow-y:auto;
+    display:none;
+    flex-direction:column;
+    -ms-overflow-style:none;
+    scrollbar-width:none;
+  }
+  .screen::-webkit-scrollbar{display:none;}
+  .screen.active{display:flex;}
+
+  /* ---------- Header / progress ---------- */
+  .app-header{
+    padding:18px 20px 16px;
+    flex-shrink:0;
+  }
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  .h1{
+    font-family:'Anton', sans-serif;
+    font-size:26px;
+    letter-spacing:0.01em;
+    color:var(--text);
+    margin:0 0 14px 0;
+    line-height:1;
+  }
+  .budget-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .budget-track{
+    flex:1;
+    height:8px;
+    border-radius:8px;
+    background:var(--surface-2);
+    overflow:hidden;
+    position:relative;
+  }
+  .budget-fill{
+    height:100%;
+    border-radius:8px;
+    background:linear-gradient(90deg, var(--gold), var(--red));
+    width:0%;
+    transition:width .5s ease;
+  }
+  .budget-label{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--text-dim);
+    white-space:nowrap;
+  }
+
+  /* ---------- Ticket stub list ---------- */
+  .stub-list{
+    padding:6px 16px 100px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .stub{
+    display:flex;
+    align-items:stretch;
+    background:var(--surface);
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,0.05);
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform .15s ease, border-color .15s ease;
+    position:relative;
+  }
+  .stub:active{ transform:scale(0.98); }
+  .stub.done{ opacity:0.55; }
+  .stub.deferred{ border-color:rgba(155,140,255,0.4); }
+  .stub.current{
+    border-color:rgba(245,185,66,0.5);
+    box-shadow:0 0 0 1px rgba(245,185,66,0.25), 0 8px 20px -8px rgba(245,185,66,0.3);
+  }
+  .stub-num{
+    width:56px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Anton', sans-serif;
+    font-size:22px;
+    color:var(--ink);
+    background:var(--gold);
+    position:relative;
+  }
+  .stub.done .stub-num{ background:var(--green); }
+  .stub.deferred .stub-num{ background:var(--violet); }
+  .stub-num::after{
+    content:'';
+    position:absolute;
+    right:-1px;
+    top:0;
+    bottom:0;
+    width:0;
+    border-right:2px dashed rgba(0,0,0,0.25);
+  }
+  .stub-perf{
+    width:0;
+    border-left:2px dashed var(--stub-edge);
+    position:relative;
+  }
+  .stub-perf::before, .stub-perf::after{
+    content:'';
+    position:absolute;
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:var(--ink);
+    left:-8px;
+  }
+  .stub-perf::before{ top:-7px; }
+  .stub-perf::after{ bottom:-7px; }
+  .stub-body{
+    flex:1;
+    padding:12px 14px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:3px;
+    min-width:0;
+  }
+  .stub-title{
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--text);
+  }
+  .stub-sub{
+    font-size:12px;
+    color:var(--text-dim);
+    line-height:1.35;
+  }
+  .stub-meta{
+    display:flex;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:5px;
+    max-width:108px;
+    padding:10px 12px 10px 0;
+    flex-shrink:0;
+  }
+  .tag{
+    font-family:'Space Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:4px 7px;
+    border-radius:6px;
+    white-space:nowrap;
+  }
+  .tag.video{ background:rgba(255,84,112,0.15); color:var(--red); }
+  .tag.photo{ background:rgba(245,185,66,0.15); color:var(--gold); }
+  .tag.done{ background:rgba(61,220,151,0.15); color:var(--green); }
+  .tag.deferred{ background:rgba(155,140,255,0.15); color:var(--violet); }
+  .tag.gold{ background:var(--gold); color:var(--ink); font-weight:800; }
+  .tag.time{
+    background:var(--surface-2);
+    color:var(--text-dim);
+    border:1px solid rgba(255,255,255,0.1);
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    text-transform:none;
+  }
+
+  .stub-stamp{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%) rotate(-8deg);
+    font-family:'Anton', sans-serif;
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--green);
+    border:2px solid var(--green);
+    border-radius:6px;
+    padding:2px 6px;
+    opacity:0.85;
+  }
+
+  /* ---------- Nudge banner ---------- */
+  .nudge{
+    margin:0 16px 4px;
+    padding:14px 16px;
+    border-radius:16px;
+    background:linear-gradient(135deg, rgba(155,140,255,0.18), rgba(155,140,255,0.06));
+    border:1px solid rgba(155,140,255,0.35);
+    display:none;
+    flex-direction:column;
+    gap:8px;
+  }
+  .nudge.show{ display:flex; }
+  .nudge-title{
+    font-size:13.5px;
+    font-weight:800;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .nudge-body{
+    font-size:12.5px;
+    color:var(--text-dim);
+    line-height:1.4;
+  }
+  .nudge-btn{
+    align-self:flex-start;
+    background:var(--violet);
+    color:var(--ink);
+    border:none;
+    font-family:'Manrope';
+    font-weight:800;
+    font-size:12.5px;
+    padding:8px 14px;
+    border-radius:10px;
+    cursor:pointer;
+  }
+
+  /* ---------- Capture screen ---------- */
+  .capture-screen{
+    background:linear-gradient(180deg, #1A1622 0%, #0E0C14 100%);
+  }
+  .capture-top{
+    padding:16px 20px 0;
+    flex-shrink:0;
+  }
+  .back-btn{
+    background:none;
+    border:none;
+    color:var(--text-dim);
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    cursor:pointer;
+    padding:6px 0 14px;
+  }
+  .capture-num{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--gold);
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+  }
+  .capture-title{
+    font-family:'Anton', sans-serif;
+    font-size:28px;
+    color:var(--text);
+    margin:4px 0 10px;
+    line-height:1.05;
+  }
+  .capture-req{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .mode-toggle{
+    margin:0 20px 14px;
+    display:flex;
+    gap:6px;
+    background:var(--surface);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:14px;
+    padding:4px;
+  }
+  .mode-btn{
+    flex:1;
+    border:none;
+    background:transparent;
+    color:var(--text-dim);
+    font-family:'Manrope';
+    font-weight:700;
+    font-size:12.5px;
+    padding:9px 0;
+    border-radius:10px;
+    cursor:pointer;
+    transition:all .15s ease;
+  }
+  .mode-btn.active{
+    background:var(--surface-2);
+    color:var(--text);
+    box-shadow:0 0 0 1px rgba(245,185,66,0.35) inset;
+  }
+  .mode-toggle.hidden{ display:none; }
+
+  .prompt-card{
+    margin:0 20px 16px;
+    padding:18px;
+    background:var(--surface);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.06);
+  }
+  .prompt-label{
+    font-family:'Space Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:8px;
+  }
+  .prompt-line{
+    font-size:17px;
+    font-weight:700;
+    color:var(--text);
+    line-height:1.4;
+  }
+  .viewfinder{
+    margin:0 20px;
+    flex:1;
+    min-height:220px;
+    border-radius:20px;
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 10px),
+      linear-gradient(160deg, #2A2438, #14111C);
+    border:1px solid rgba(255,255,255,0.07);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .viewfinder-icon{
+    font-size:44px;
+    opacity:0.35;
+  }
+  .rec-pill{
+    position:absolute;
+    top:14px;
+    left:14px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(0,0,0,0.5);
+    padding:6px 10px;
+    border-radius:20px;
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:var(--text);
+  }
+  .rec-dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--red);
+  }
+  .rec-dot.pulsing{ animation:pulse 1s infinite; }
+  @keyframes pulse{ 50%{ opacity:0.3; } }
+
+  .capture-controls{
+    padding:18px 20px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    flex-shrink:0;
+  }
+  .rec-btn{
+    height:58px;
+    border-radius:29px;
+    border:none;
+    background:var(--red);
+    color:#fff;
+    font-family:'Anton', sans-serif;
+    font-size:17px;
+    letter-spacing:0.03em;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+  .rec-btn.stop{ background:var(--text); color:var(--ink); }
+  .secondary-btn{
+    height:46px;
+    border-radius:23px;
+    border:1px solid rgba(255,255,255,0.12);
+    background:transparent;
+    color:var(--text-dim);
+    font-family:'Manrope';
+    font-weight:700;
+    font-size:13.5px;
+    cursor:pointer;
+  }
+  .secondary-btn.violet{
+    border-color:rgba(155,140,255,0.4);
+    color:var(--violet);
+  }
+
+  /* ---------- Done screen ---------- */
+  .done-screen{
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px;
+    gap:16px;
+  }
+  .done-badge{
+    font-family:'Anton', sans-serif;
+    font-size:60px;
+    color:var(--green);
+  }
+  .done-title{
+    font-family:'Anton', sans-serif;
+    font-size:24px;
+    color:var(--text);
+  }
+  .done-sub{
+    font-size:13.5px;
+    color:var(--text-dim);
+    line-height:1.5;
+    max-width:260px;
+  }
+  .done-btn{
+    margin-top:10px;
+    background:var(--gold);
+    color:var(--ink);
+    border:none;
+    font-family:'Anton', sans-serif;
+    font-size:15px;
+    padding:14px 28px;
+    border-radius:26px;
+    cursor:pointer;
+  }
+
+  .intro-list{
+    flex:1;
+    overflow-y:auto;
+    padding:8px 20px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .intro-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:var(--surface);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:16px;
+    padding:14px;
+    cursor:pointer;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .intro-card:active{ transform:scale(0.98); }
+  .intro-card.selected{
+    border-color:rgba(245,185,66,0.55);
+    box-shadow:0 0 0 1px rgba(245,185,66,0.25) inset;
+  }
+  .intro-thumb{
+    width:52px; height:52px;
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px;
+    background:linear-gradient(160deg, #2A2438, #14111C);
+    flex-shrink:0;
+  }
+  .intro-info{ flex:1; min-width:0; }
+  .intro-name{ font-size:14.5px; font-weight:700; color:var(--text); }
+  .intro-desc{ font-size:12px; color:var(--text-dim); margin-top:2px; }
+  .intro-check{
+    width:22px; height:22px;
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,0.15);
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px;
+    color:var(--ink);
+  }
+  .intro-card.selected .intro-check{
+    background:var(--gold);
+    border-color:var(--gold);
+  }
+
+  .ridedata-note{
+    margin:0 20px 14px;
+    font-size:12.5px;
+    color:var(--text-dim);
+    line-height:1.5;
+  }
+  .field-list{
+    flex:1;
+    overflow-y:auto;
+    padding:0 20px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .field{
+    background:var(--surface);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:16px;
+    padding:13px 14px;
+  }
+  .field.needs-verify{
+    border-color:rgba(245,185,66,0.45);
+    box-shadow:0 0 0 1px rgba(245,185,66,0.18) inset;
+  }
+  .field.confirmed{ border-color:rgba(61,220,151,0.4); }
+  .field.conflict{ border-color:rgba(255,84,112,0.5); }
+  .field-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .field-label{
+    font-family:'Space Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+  }
+  .field-value{
+    font-size:16px;
+    font-weight:700;
+    color:var(--text);
+    background:transparent;
+    border:none;
+    width:100%;
+    font-family:'Manrope';
+    padding:0;
+    outline:none;
+  }
+  .field-value:focus{
+    border-bottom:1px solid var(--gold);
+  }
+  .field-source{
+    font-size:11px;
+    color:var(--text-faint);
+    margin-top:7px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+  }
+  .field-actions{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+  }
+  .mini-btn{
+    flex:1;
+    border:1px solid rgba(255,255,255,0.12);
+    background:transparent;
+    color:var(--text-dim);
+    font-family:'Manrope';
+    font-weight:700;
+    font-size:11.5px;
+    padding:7px 0;
+    border-radius:9px;
+    cursor:pointer;
+  }
+  .mini-btn.primary{
+    background:var(--green);
+    border-color:var(--green);
+    color:var(--ink);
+  }
+  .tag.verify{ background:var(--gold); color:var(--ink); font-weight:800; }
+  .tag.stale{ background:rgba(255,84,112,0.15); color:var(--red); }
+  .tag.ok{ background:rgba(61,220,151,0.15); color:var(--green); }
+
+  .secondary-btn.gold-btn{
+    border-color:rgba(245,185,66,0.45);
+    color:var(--gold);
+  }
+
+  .toast{
+    position:absolute;
+    bottom:22px;
+    left:20px;
+    right:20px;
+    background:var(--surface-2);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:14px;
+    padding:12px 16px;
+    font-size:12.5px;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transform:translateY(120px);
+    opacity:0;
+    transition:all .35s cubic-bezier(.2,.9,.3,1.2);
+    z-index:20;
+  }
+  .toast.show{ transform:translateY(0); opacity:1; }
+  .toast-dot{ width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<div class="device" id="device">
+
+  <!-- ============ SCREEN 1: SHOT LIST ============ -->
+  <div class="screen active" id="screen-list">
+    <div class="statusbar"><span>9:41</span><span>SceneCue</span></div>
+    <div class="app-header">
+      <div class="eyebrow">Space Mountain · Tomorrowland</div>
+      <div class="h1">Your Shot List</div>
+      <div class="budget-row">
+        <div class="budget-track"><div class="budget-fill" id="budgetFill"></div></div>
+        <div class="budget-label" id="budgetLabel">0 / 60s planned</div>
+      </div>
+    </div>
+
+    <div class="nudge" id="nudge">
+      <div class="nudge-title">💜 One thing left from the queue</div>
+      <div class="nudge-body">You skipped the pre-ride check-in earlier. Answer it now, while it's fresh.</div>
+      <button class="nudge-btn" onclick="openCapture(4, true)">Answer now — 8 sec</button>
+    </div>
+
+    <div class="stub-list" id="stubList"></div>
+  </div>
+
+  <!-- ============ SCREEN 1b: INTRO PICKER ============ -->
+  <div class="screen" id="screen-intro">
+    <div class="statusbar"><span>9:41</span><span>SceneCue</span></div>
+    <div class="capture-top">
+      <button class="back-btn" onclick="goList()">← Shot List</button>
+      <div class="capture-num">Scene 1 of 7 · Reusable</div>
+      <div class="capture-title">Intro Bumper</div>
+    </div>
+    <div class="intro-list" id="introList"></div>
+    <div class="capture-controls">
+      <button class="secondary-btn" onclick="goList()">Done</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 1c: RIDE DATA CONFIRM ============ -->
+  <div class="screen" id="screen-ridedata">
+    <div class="statusbar"><span>9:41</span><span>SceneCue</span></div>
+    <div class="capture-top">
+      <button class="back-btn" onclick="goList()">← Shot List</button>
+      <div class="capture-num" id="rideDataNum">Ride Info · Auto-filled</div>
+      <div class="capture-title">Space Mountain</div>
+    </div>
+    <div class="ridedata-note">
+      We pulled this from public sources. Check anything marked <span class="tag verify">VERIFY</span> before it goes on screen.
+    </div>
+    <div class="field-list" id="fieldList"></div>
+    <div class="capture-controls">
+      <button class="rec-btn" id="confirmAllBtn" onclick="confirmRideData()">✓ Confirm & Use</button>
+      <button class="secondary-btn" onclick="goList()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 2: CAPTURE ============ -->
+  <div class="screen capture-screen" id="screen-capture">
+    <div class="capture-top">
+      <button class="back-btn" onclick="goList()">← Shot List</button>
+      <div class="capture-num" id="capNum">Scene 4 of 7</div>
+      <div class="capture-title" id="capTitle">Pre-Ride Check-In</div>
+      <div class="capture-req" id="capReq"></div>
+    </div>
+
+    <div class="mode-toggle" id="modeToggle">
+      <button class="mode-btn active" id="modeVideoBtn" onclick="setMode('video')">🎥 Video</button>
+      <button class="mode-btn" id="modePhotoBtn" onclick="setMode('photo')">📷 Photo</button>
+    </div>
+
+    <div class="prompt-card" id="promptCard" style="display:none;">
+      <div class="prompt-label">SceneCue feeds you this line</div>
+      <div class="prompt-line" id="promptLine">"On a scale of 1 to 10 — how nervous are you right now?"</div>
+    </div>
+
+    <div class="viewfinder" id="viewfinder">
+      <div class="rec-pill" id="recPill" style="display:none;">
+        <div class="rec-dot pulsing"></div><span id="recTimer">0:00</span>
+      </div>
+      <div class="viewfinder-icon" id="viewfinderIcon">🎥</div>
+    </div>
+
+    <div class="capture-controls">
+      <button class="rec-btn" id="recBtn" onclick="toggleRecord()">● Start Recording</button>
+      <button class="secondary-btn" id="uploadBtn" onclick="triggerUpload()">⬆ Upload from Library</button>
+      <button class="secondary-btn gold-btn" id="rideInfoBtn" onclick="openRideData()" style="display:none;">📋 Review auto-filled ride info</button>
+      <input type="file" id="fileInput" accept="image/*,video/*" style="display:none;" onchange="handleFileUpload(event)">
+      <button class="secondary-btn violet" id="deferBtn" onclick="deferScene()" style="display:none;">Skip — ask me after the ride</button>
+      <button class="secondary-btn" onclick="goList()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 3: ALL DONE ============ -->
+  <div class="screen done-screen" id="screen-done">
+    <div class="done-badge">✓</div>
+    <div class="done-title">All 7 scenes captured</div>
+    <div class="done-sub">SceneCue is assembling your 60-second cut — intro, queue, ride, and your check-in are slotting into place.</div>
+    <button class="done-btn" onclick="restart()">Watch a New Ride</button>
+  </div>
+
+  <div class="toast" id="toast"><div class="toast-dot"></div><span id="toastText">Scene saved</span></div>
+</div>
+
+<script>
+const scenes = [
+  {id:1, title:"Intro Bumper", sub:"Pre-built — pick your intro style", type:"reused", req:[{t:"AUTO",c:"gold"}], capturable:false, dur:0, allowTypes:[]},
+  {id:2, title:"Walking In", sub:"Selfie video at the entrance sign", type:"video", req:[{t:"VIDEO OR PHOTO",c:"video"},{t:"~6 seconds",c:"time"}], capturable:true, dur:6, prompt:null, allowTypes:["video","photo"]},
+  {id:3, title:"Queue", sub:"3 photos of the line + wait-time sign", type:"photo", req:[{t:"3 PHOTOS",c:"photo"},{t:"OR VIDEO",c:"video"},{t:"~8 seconds",c:"time"}], capturable:true, dur:8, prompt:null, allowTypes:["photo","video"]},
+  {id:3.5, title:"Height Sign", sub:"1 clear photo — or use our auto-filled height data", type:"photo", req:[{t:"1 PHOTO",c:"photo"},{t:"OR VIDEO",c:"video"},{t:"~2 seconds",c:"time"}], capturable:true, dur:2, prompt:null, allowTypes:["photo","video"], usesRideData:true},
+  {id:4, title:"Pre-Ride Check-In", sub:"Answer live, or defer until after", type:"video", req:[{t:"VIDEO OR PHOTO",c:"video"},{t:"CAN DEFER",c:"deferred"},{t:"~5 seconds",c:"time"}], capturable:true, dur:5, prompt:"\u201cOn a scale of 1 to 10 \u2014 how nervous are you right now?\u201d", deferrable:true, allowTypes:["video","photo"]},
+  {id:5, title:"The Ride — Payload Scene", sub:"Board \u2192 ride \u2192 exit, one continuous take. This is the payload — the moment the whole video is built around, so no photo fallback.", type:"video", req:[{t:"~40s RAW",c:"video"},{t:"PAYLOAD",c:"gold"},{t:"~22 seconds",c:"time"}], capturable:true, dur:22, prompt:null, allowTypes:["video"]},
+  {id:6, title:"Post-Ride Reaction", sub:"Unscripted — however you actually feel", type:"video", req:[{t:"VIDEO OR PHOTO",c:"video"},{t:"~6 seconds",c:"time"}], capturable:true, dur:6, prompt:null, allowTypes:["video","photo"]},
+  {id:7, title:"Sign-Off", sub:"Short goodbye line to camera", type:"video", req:[{t:"VIDEO OR PHOTO",c:"video"},{t:"~5 seconds",c:"time"}], capturable:true, dur:5, prompt:"\u201cSay a quick goodbye \u2014 we\u2019ll add hours & height info on screen.\u201d", allowTypes:["video","photo"], usesRideData:true},
+];
+
+// Ride data: split by how costly a wrong value is.
+// tier1 = structured API, tier2 = official site, tier3 = community wiki, user = creator override
+const rideData = [
+  {key:"height", label:"Height Minimum", value:"44 in (112 cm)", source:"Disneyland official site", tier:2,
+   critical:true, confirmed:false, note:"Safety-critical — always confirm before it goes on screen."},
+  {key:"hours", label:"Park Hours Today", value:"8:00 AM – 12:00 AM", source:"ThemeParks.wiki API", tier:1,
+   volatile:true, confirmed:false, freshness:"as of 6:12 AM today"},
+  {key:"wait", label:"Current Wait", value:"35 min", source:"Queue-Times API", tier:1,
+   volatile:true, confirmed:false, freshness:"as of 9:38 AM"},
+  {key:"lockers", label:"Locker Location", value:"Left of the main entrance, near Tomorrowland Terrace", source:"Crowdsourced — 12 confirmations", tier:4, confirmed:false},
+  {key:"speed", label:"Top Speed", value:"28 mph", source:"RCDB community database", tier:3, lowStakes:true, confirmed:true},
+  {key:"opened", label:"Opened", value:"1977", source:"RCDB community database", tier:3, lowStakes:true, confirmed:true},
+];
+
+const introStyles = [
+  {id:"marquee", icon:"🎪", name:"Marquee Lights", desc:"Ticket-booth title card, warm gold glow"},
+  {id:"launch", icon:"🚀", name:"Launch Countdown", desc:"3-2-1 countdown with whoosh transition"},
+  {id:"classic", icon:"🎬", name:"Classic Clapboard", desc:"Film slate snap, minimal and fast"},
+  {id:"neon", icon:"✨", name:"Neon Loop", desc:"Glowing loop-track title, high energy"},
+];
+let selectedIntro = "marquee";
+
+let state = {};
+scenes.forEach(s => state[s.id] = s.type === "reused" ? "done" : "pending");
+let currentScene = null;
+let recording = false;
+let recTimerInt = null;
+let recSeconds = 0;
+
+function totalPlannedDuration(){
+  return scenes.reduce((sum,s)=> sum + s.dur, 0);
+}
+function capturedDuration(){
+  return scenes.reduce((sum,s)=> sum + (state[s.id]==="done" ? s.dur : 0), 0);
+}
+
+function renderList(){
+  const list = document.getElementById('stubList');
+  list.innerHTML = '';
+  scenes.forEach(s => {
+    const st = state[s.id];
+    const div = document.createElement('div');
+    div.className = 'stub ' + (st==='done' ? 'done' : st==='deferred' ? 'deferred' : '');
+    if (st==='pending' && isNextUp(s)) div.className += ' current';
+    div.onclick = () => { if (s.capturable) openCapture(s.id); else if (s.id === 1) openIntroPicker(); };
+
+    let numDisplay = s.id.toString().replace('.5','b');
+    let stampHtml = '';
+    if (st==='done') stampHtml = '<div class="stub-stamp">DONE</div>';
+
+    div.innerHTML = `
+      <div class="stub-num">${numDisplay}</div>
+      <div class="stub-perf"></div>
+      <div class="stub-body">
+        <div class="stub-title">${s.title}</div>
+        <div class="stub-sub">${st==='deferred' ? "Deferred — we'll ask again soon" : s.id===1 ? `${introStyles.find(x=>x.id===selectedIntro).name} — tap to change` : s.sub}</div>
+      </div>
+      <div class="stub-meta">
+        ${s.req.map(r=>`<span class="tag ${r.c}">${r.t}</span>`).join('')}
+      </div>
+      ${stampHtml}
+    `;
+    list.appendChild(div);
+  });
+
+  const pct = Math.min(100, Math.round((capturedDuration()/60)*100));
+  document.getElementById('budgetFill').style.width = pct + '%';
+  document.getElementById('budgetLabel').textContent = capturedDuration() + ' / 60s captured';
+
+  // nudge logic: show if scene 4 deferred and scene 6 already done
+  const nudge = document.getElementById('nudge');
+  if (state[4] === 'deferred' && state[6] === 'done') {
+    nudge.classList.add('show');
+  } else {
+    nudge.classList.remove('show');
+  }
+
+  // check completion
+  const allDone = scenes.every(s => state[s.id] === 'done');
+  if (allDone) {
+    setTimeout(()=> showScreen('screen-done'), 400);
+  }
+}
+
+function isNextUp(scene){
+  const firstPending = scenes.find(s => s.capturable && state[s.id]==='pending');
+  return firstPending && firstPending.id === scene.id;
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function openRideData(){
+  renderFieldList();
+  showScreen('screen-ridedata');
+}
+
+function renderFieldList(){
+  const list = document.getElementById('fieldList');
+  list.innerHTML = '';
+  rideData.forEach((f, i) => {
+    const needsVerify = f.critical && !f.confirmed;
+    const div = document.createElement('div');
+    div.className = 'field' + (needsVerify ? ' needs-verify' : '') + (f.confirmed ? ' confirmed' : '');
+
+    let badge = '';
+    if (needsVerify) badge = '<span class="tag verify">VERIFY</span>';
+    else if (f.confirmed) badge = '<span class="tag ok">CONFIRMED</span>';
+    else if (f.volatile) badge = '<span class="tag stale">TIME-SENSITIVE</span>';
+
+    const freshness = f.freshness ? ` · ${f.freshness}` : '';
+
+    div.innerHTML = `
+      <div class="field-head">
+        <div class="field-label">${f.label}</div>
+        ${badge}
+      </div>
+      <input class="field-value" value="${f.value.replace(/"/g,'&quot;')}"
+             oninput="editField(${i}, this.value)" />
+      <div class="field-source">📍 ${f.source}${freshness}</div>
+      ${f.note ? `<div class="field-source" style="color:var(--gold);">⚠ ${f.note}</div>` : ''}
+      <div class="field-actions">
+        <button class="mini-btn ${f.confirmed ? '' : 'primary'}" onclick="confirmField(${i})">
+          ${f.confirmed ? '✓ Confirmed' : 'Looks right'}
+        </button>
+        <button class="mini-btn" onclick="focusField(${i})">Edit</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function editField(i, val){
+  rideData[i].value = val;
+  rideData[i].source = "You edited this";
+  rideData[i].tier = "user";
+  rideData[i].confirmed = true;
+}
+
+function confirmField(i){
+  rideData[i].confirmed = true;
+  renderFieldList();
+  showToast(`${rideData[i].label} confirmed`);
+}
+
+function focusField(i){
+  renderFieldList();
+  const inputs = document.querySelectorAll('.field-value');
+  if (inputs[i]) { inputs[i].focus(); inputs[i].select(); }
+}
+
+function confirmRideData(){
+  const unverified = rideData.filter(f => f.critical && !f.confirmed);
+  if (unverified.length){
+    showToast(`Confirm ${unverified[0].label} first — it's safety-critical`);
+    return;
+  }
+  const edited = rideData.filter(f => f.tier === "user").length;
+  showToast(edited
+    ? `Saved — ${edited} correction${edited>1?'s':''} shared back to the ride database`
+    : 'Ride info confirmed');
+  setTimeout(()=> goList(), 700);
+}
+
+function openIntroPicker(){
+  renderIntroList();
+  showScreen('screen-intro');
+}
+
+function renderIntroList(){
+  const list = document.getElementById('introList');
+  list.innerHTML = '';
+  introStyles.forEach(style => {
+    const card = document.createElement('div');
+    card.className = 'intro-card' + (selectedIntro === style.id ? ' selected' : '');
+    card.onclick = () => selectIntro(style.id);
+    card.innerHTML = `
+      <div class="intro-thumb">${style.icon}</div>
+      <div class="intro-info">
+        <div class="intro-name">${style.name}</div>
+        <div class="intro-desc">${style.desc}</div>
+      </div>
+      <div class="intro-check">${selectedIntro === style.id ? '✓' : ''}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function selectIntro(id){
+  selectedIntro = id;
+  const style = introStyles.find(s => s.id === id);
+  renderIntroList();
+  showToast(`Intro set to ${style.name}`);
+}
+
+function goList(){
+  stopRecordingUI();
+  renderList();
+  showScreen('screen-list');
+}
+
+let captureMode = 'video';
+
+function openCapture(id, fromNudge){
+  currentScene = scenes.find(s => s.id === id);
+  document.getElementById('capNum').textContent = `Scene ${id.toString().replace('.5','b')} of 7`;
+  document.getElementById('capTitle').textContent = currentScene.title;
+
+  const reqWrap = document.getElementById('capReq');
+  reqWrap.innerHTML = currentScene.req.map(r=>`<span class="tag ${r.c}">${r.t}</span>`).join('');
+
+  const promptCard = document.getElementById('promptCard');
+  if (currentScene.prompt){
+    promptCard.style.display = 'block';
+    document.getElementById('promptLine').textContent = currentScene.prompt;
+  } else {
+    promptCard.style.display = 'none';
+  }
+
+  document.getElementById('deferBtn').style.display = (currentScene.deferrable && !fromNudge) ? 'block' : 'none';
+  document.getElementById('rideInfoBtn').style.display = currentScene.usesRideData ? 'block' : 'none';
+
+  // mode toggle: only show if the scene genuinely allows a choice
+  const toggle = document.getElementById('modeToggle');
+  if (currentScene.allowTypes && currentScene.allowTypes.length > 1){
+    toggle.classList.remove('hidden');
+  } else {
+    toggle.classList.add('hidden');
+  }
+  const defaultMode = (currentScene.allowTypes && currentScene.allowTypes[0]) || 'video';
+  setMode(defaultMode);
+
+  stopRecordingUI();
+  showScreen('screen-capture');
+}
+
+function setMode(mode){
+  captureMode = mode;
+  document.getElementById('modeVideoBtn').classList.toggle('active', mode === 'video');
+  document.getElementById('modePhotoBtn').classList.toggle('active', mode === 'photo');
+  document.getElementById('viewfinderIcon').textContent = mode === 'video' ? '🎥' : '📷';
+  stopRecordingUI();
+  const btn = document.getElementById('recBtn');
+  btn.textContent = mode === 'video' ? '● Start Recording' : '📷 Take Photo';
+}
+
+function toggleRecord(){
+  if (captureMode === 'photo'){
+    finishCapture('Photo saved');
+    return;
+  }
+  const btn = document.getElementById('recBtn');
+  const pill = document.getElementById('recPill');
+  if (!recording){
+    recording = true;
+    recSeconds = 0;
+    btn.textContent = '■ Stop & Save';
+    btn.classList.add('stop');
+    pill.style.display = 'flex';
+    recTimerInt = setInterval(()=>{
+      recSeconds++;
+      const m = Math.floor(recSeconds/60), s = recSeconds%60;
+      document.getElementById('recTimer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    }, 1000);
+  } else {
+    finishCapture(`${currentScene.title} saved`);
+  }
+}
+
+function stopRecordingUI(){
+  recording = false;
+  clearInterval(recTimerInt);
+  recSeconds = 0;
+  const btn = document.getElementById('recBtn');
+  btn.classList.remove('stop');
+  document.getElementById('recPill').style.display = 'none';
+  document.getElementById('recTimer').textContent = '0:00';
+}
+
+function finishCapture(message){
+  clearInterval(recTimerInt);
+  state[currentScene.id] = 'done';
+  showToast(message || `${currentScene.title} saved`);
+  setTimeout(()=> goList(), 550);
+}
+
+function triggerUpload(){
+  document.getElementById('fileInput').click();
+}
+
+function handleFileUpload(event){
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const isVideo = file.type.startsWith('video');
+  showToast(`Uploaded ${isVideo ? 'video' : 'photo'} for ${currentScene.title}`);
+  state[currentScene.id] = 'done';
+  setTimeout(()=> goList(), 550);
+  event.target.value = '';
+}
+
+function deferScene(){
+  state[currentScene.id] = 'deferred';
+  showToast("Saved for later — we'll remind you");
+  setTimeout(()=> goList(), 550);
+}
+
+function showToast(text){
+  document.getElementById('toastText').textContent = text;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 1800);
+}
+
+function restart(){
+  scenes.forEach(s => state[s.id] = s.type === "reused" ? "done" : "pending");
+  goList();
+}
+
+renderList();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SceneCue — Output Animatic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#131019;
+    --surface:#1D1926;
+    --surface-2:#26202F;
+    --gold:#F5B942;
+    --red:#FF5470;
+    --violet:#9B8CFF;
+    --green:#3DDC97;
+    --text:#F5F2EA;
+    --text-dim:#A9A3BB;
+    --text-faint:#6F6A82;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:radial-gradient(circle at 50% 0%, #221D30 0%, #0E0C14 60%);
+    min-height:100vh;
+    font-family:'Manrope',sans-serif;
+    color:var(--text);
+    padding:28px 20px 60px;
+  }
+  .wrap{max-width:940px;margin:0 auto;}
+
+  .masthead{margin-bottom:22px;}
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);margin-bottom:7px;
+  }
+  h1{font-family:'Anton',sans-serif;font-size:clamp(28px,5vw,42px);margin:0 0 8px;letter-spacing:.01em;}
+  .sub{font-size:13.5px;color:var(--text-dim);max-width:620px;line-height:1.55;}
+
+  .stage{
+    display:grid;
+    grid-template-columns:300px 1fr;
+    gap:22px;
+    align-items:start;
+  }
+  @media(max-width:800px){ .stage{grid-template-columns:1fr;} }
+
+  /* ---- phone screen ---- */
+  .phone{
+    background:var(--ink);
+    border:7px solid #06050A;
+    border-radius:30px;
+    overflow:hidden;
+    aspect-ratio:9/16;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.7);
+  }
+  .frame{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    text-align:center;padding:24px;
+    gap:10px;
+    transition:background .35s ease;
+  }
+  .frame-icon{font-size:52px;line-height:1;}
+  .frame-kicker{
+    font-family:'Space Mono',monospace;
+    font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--text-faint);
+  }
+  .frame-title{font-family:'Anton',sans-serif;font-size:23px;line-height:1.1;}
+  .frame-note{font-size:11.5px;color:var(--text-dim);line-height:1.45;}
+
+  /* burned-in overlays */
+  .overlay-card{
+    position:absolute;left:14px;right:14px;bottom:16px;
+    background:rgba(8,6,12,.82);
+    border:1px solid rgba(245,185,66,.35);
+    border-radius:12px;padding:10px 12px;text-align:left;
+    display:none;
+  }
+  .overlay-card.show{display:block;}
+  .overlay-row{
+    display:flex;justify-content:space-between;gap:10px;
+    font-size:10.5px;padding:2px 0;color:var(--text-dim);
+  }
+  .overlay-row b{color:var(--text);font-weight:700;}
+  .overlay-head{
+    font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:5px;
+  }
+
+  .stat-chip{
+    position:absolute;top:14px;left:14px;
+    background:rgba(8,6,12,.78);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:9px;padding:6px 9px;
+    font-family:'Space Mono',monospace;font-size:10px;
+    display:none;
+  }
+  .stat-chip.show{display:block;}
+
+  .sub-caption{
+    position:absolute;left:16px;right:16px;bottom:70px;
+    font-size:13px;font-weight:700;line-height:1.35;
+    text-shadow:0 2px 8px rgba(0,0,0,.9);
+    display:none;
+  }
+  .sub-caption.show{display:block;}
+
+  .timecode{
+    position:absolute;top:12px;right:14px;
+    font-family:'Space Mono',monospace;font-size:10px;
+    color:var(--text-faint);
+  }
+
+  /* ---- right panel ---- */
+  .panel{display:flex;flex-direction:column;gap:16px;}
+
+  .controls{
+    display:flex;align-items:center;gap:12px;
+    background:var(--surface);border:1px solid rgba(255,255,255,.06);
+    border-radius:16px;padding:12px 14px;
+  }
+  .play-btn{
+    width:44px;height:44px;border-radius:50%;
+    border:none;background:var(--gold);color:var(--ink);
+    font-size:16px;cursor:pointer;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .scrub{flex:1;height:6px;border-radius:6px;background:var(--surface-2);position:relative;cursor:pointer;}
+  .scrub-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--red));width:0%;}
+  .tc{font-family:'Space Mono',monospace;font-size:12px;color:var(--text-dim);white-space:nowrap;}
+
+  /* ---- track lanes ---- */
+  .tracks{
+    background:var(--surface);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:16px;padding:14px;
+    display:flex;flex-direction:column;gap:11px;
+    position:relative;
+  }
+  .lane-label{
+    font-family:'Space Mono',monospace;font-size:9px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);
+    margin-bottom:5px;
+  }
+  .lane{position:relative;height:34px;border-radius:8px;background:var(--surface-2);overflow:hidden;}
+  .lane.thin{height:20px;}
+  .blk{
+    position:absolute;top:0;bottom:0;
+    border-right:1px solid rgba(0,0,0,.45);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Mono',monospace;font-size:8.5px;
+    letter-spacing:.03em;color:rgba(0,0,0,.75);font-weight:700;
+    overflow:hidden;white-space:nowrap;
+    transition:filter .2s ease;
+  }
+  .blk.dim{filter:brightness(.45) saturate(.5);}
+  .narr{
+    position:absolute;top:3px;bottom:3px;border-radius:5px;
+    background:var(--violet);opacity:.9;
+    display:flex;align-items:center;padding:0 6px;
+    font-size:8.5px;font-weight:800;color:var(--ink);
+    overflow:hidden;white-space:nowrap;
+  }
+  .music{
+    position:absolute;top:0;bottom:0;left:0;right:0;
+    background:repeating-linear-gradient(90deg,rgba(61,220,151,.55) 0 2px,transparent 2px 5px);
+  }
+  .duck{
+    position:absolute;top:0;bottom:0;
+    background:rgba(19,16,25,.82);
+    border-left:1px dashed rgba(61,220,151,.5);
+    border-right:1px dashed rgba(61,220,151,.5);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Mono',monospace;font-size:7.5px;color:var(--green);
+  }
+  .playhead{
+    position:absolute;top:10px;bottom:10px;width:2px;
+    background:var(--text);z-index:5;pointer-events:none;
+    box-shadow:0 0 8px rgba(245,242,234,.7);
+  }
+
+  /* ---- solver readout ---- */
+  .solver{
+    background:var(--surface);border:1px solid rgba(255,255,255,.06);
+    border-radius:16px;padding:15px;
+  }
+  .solver h3{
+    font-family:'Anton',sans-serif;font-size:15px;margin:0 0 4px;letter-spacing:.02em;
+  }
+  .solver p{font-size:12px;color:var(--text-dim);margin:0 0 12px;line-height:1.5;}
+  .srow{
+    display:flex;align-items:center;gap:9px;
+    padding:6px 0;border-top:1px solid rgba(255,255,255,.05);
+    font-size:11.5px;
+  }
+  .srow:first-of-type{border-top:none;}
+  .sname{flex:1;color:var(--text);}
+  .sclass{
+    font-family:'Space Mono',monospace;font-size:8.5px;
+    letter-spacing:.06em;text-transform:uppercase;
+    padding:3px 6px;border-radius:5px;white-space:nowrap;
+  }
+  .c-locked{background:rgba(255,255,255,.08);color:var(--text-dim);}
+  .c-narr{background:rgba(155,140,255,.16);color:var(--violet);}
+  .c-floor{background:var(--gold);color:var(--ink);font-weight:700;}
+  .c-elastic{background:rgba(61,220,151,.15);color:var(--green);}
+  .sdur{font-family:'Space Mono',monospace;color:var(--text-dim);width:34px;text-align:right;}
+
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10.5px;color:var(--text-faint);}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;font-style:normal;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="eyebrow">Space Mountain · assembled cut</div>
+    <h1>What comes out the other end</h1>
+    <p class="sub">The 60-second edit, played back beat by beat. Watch the narration lane drive the hold on scenes 4 and 7 — those scenes take exactly as long as the spoken line needs, and the elastic scenes absorb the difference.</p>
+  </div>
+
+  <div class="stage">
+    <!-- PHONE -->
+    <div class="phone">
+      <div class="frame" id="frame">
+        <div class="frame-kicker" id="fKicker">Scene 1</div>
+        <div class="frame-icon" id="fIcon">🎪</div>
+        <div class="frame-title" id="fTitle">Marquee Lights</div>
+        <div class="frame-note" id="fNote">Pre-built intro bumper</div>
+      </div>
+      <div class="timecode" id="tcOverlay">0:00</div>
+      <div class="stat-chip" id="statChip">28 mph · 1977</div>
+      <div class="sub-caption" id="subCap"></div>
+      <div class="overlay-card" id="endCard">
+        <div class="overlay-head">Before you go</div>
+        <div class="overlay-row"><span>Height minimum</span><b>44 in</b></div>
+        <div class="overlay-row"><span>Park hours</span><b>8 AM – 12 AM</b></div>
+        <div class="overlay-row"><span>Lockers</span><b>Left of main entrance</b></div>
+      </div>
+    </div>
+
+    <!-- PANEL -->
+    <div class="panel">
+      <div class="controls">
+        <button class="play-btn" id="playBtn">▶</button>
+        <div class="scrub" id="scrub"><div class="scrub-fill" id="scrubFill"></div></div>
+        <div class="tc" id="tc">0:00 / 1:00</div>
+      </div>
+
+      <div class="tracks" id="tracks">
+        <div>
+          <div class="lane-label">Picture</div>
+          <div class="lane" id="laneVideo"></div>
+        </div>
+        <div>
+          <div class="lane-label">Narration — sets the hold</div>
+          <div class="lane thin" id="laneNarr"></div>
+        </div>
+        <div>
+          <div class="lane-label">Music — ducks under speech</div>
+          <div class="lane thin" id="laneMusic"><div class="music"></div></div>
+        </div>
+        <div class="playhead" id="playhead" style="left:14px;"></div>
+      </div>
+
+      <div class="solver">
+        <h3>How the 60 seconds got divided</h3>
+        <p>Locked scenes reserve first. Narration scenes measure the actual speech and claim what they need. The payload holds its floor. Whatever's left goes to the elastic scenes.</p>
+        <div id="solverRows"></div>
+      </div>
+
+      <div class="legend">
+        <span><i style="background:var(--gold)"></i>Locked</span>
+        <span><i style="background:var(--violet)"></i>Narration-driven</span>
+        <span><i style="background:var(--red)"></i>Payload (floored)</span>
+        <span><i style="background:var(--green)"></i>Elastic</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const TOTAL = 60;
+
+// start, dur, class, colour, what's on screen
+const cut = [
+  {s:0,  d:3,  id:1,   name:"Marquee Lights",     kicker:"Scene 1 · Intro bumper",
+   icon:"🎪", note:"Pre-built title card. Same every video.", cls:"locked",  col:"#F5B942", bg:"#2A2038"},
+  {s:3,  d:6,  id:2,   name:"Walking In",          kicker:"Scene 2 · Walk-in",
+   icon:"🚶", note:"Auto-trimmed to the steadiest 6s. Entrance sign in frame.", cls:"elastic", col:"#3DDC97", bg:"#1B2430"},
+  {s:9,  d:8,  id:3,   name:"The Queue",           kicker:"Scene 3 · Queue",
+   icon:"📸", note:"3 photos, 2.7s each, Ken Burns drift.", cls:"elastic", col:"#3DDC97", bg:"#241F2E"},
+  {s:17, d:2,  id:3.5, name:"Height Sign",         kicker:"Scene 3b · Height sign",
+   icon:"📏", note:"Held 2s — long enough to read 44 in.", cls:"elastic", col:"#3DDC97", bg:"#1F2432"},
+  {s:19, d:5,  id:4,   name:"Pre-Ride Check-In",   kicker:"Scene 4 · Narration",
+   icon:"😬", note:"Hold = 0.4s lead + 4.0s speech + 0.6s tail.", cls:"narr", col:"#9B8CFF", bg:"#241F38"},
+  {s:24, d:22, id:5,   name:"The Ride",            kicker:"Scene 5 · Payload",
+   icon:"🎢", note:"Window picked off the accelerometer spike. Floor: 18s.", cls:"floor", col:"#FF5470", bg:"#301A26"},
+  {s:46, d:6,  id:6,   name:"Post-Ride Reaction",  kicker:"Scene 6 · Reaction",
+   icon:"😂", note:"VAD found the laugh. Trimmed to the burst.", cls:"elastic", col:"#3DDC97", bg:"#2B2233"},
+  {s:52, d:5,  id:7,   name:"Sign-Off",            kicker:"Scene 7 · Narration",
+   icon:"👋", note:"Hold = 0.4s lead + 4.0s speech + 0.6s tail.", cls:"narr", col:"#9B8CFF", bg:"#251F36"},
+  {s:57, d:3,  id:7.5, name:"End Card",            kicker:"Scene 7b · Locked",
+   icon:"🎟️", note:"Ride info from the database, burned in.", cls:"locked", col:"#F5B942", bg:"#1E1A28"},
+];
+
+// narration spans — these MEASURE first, then dictate the hold above
+const narration = [
+  {s:3.6, d:4.2, text:"Okay — Space Mountain. I have not ridden this since I was twelve."},
+  {s:19.4,d:4.0, text:"Nervous? Honestly a seven. Maybe an eight."},
+  {s:52.4,d:4.0, text:"Ten out of ten. Go ride it. Bring a locker key."},
+];
+
+const classLabel = {locked:"Locked", narr:"Narration", floor:"Payload · floor 18s", elastic:"Elastic"};
+const classCss   = {locked:"c-locked", narr:"c-narr", floor:"c-floor", elastic:"c-elastic"};
+
+let t = 0, playing = false, last = null;
+
+function buildLanes(){
+  const v = document.getElementById('laneVideo');
+  const n = document.getElementById('laneNarr');
+  const m = document.getElementById('laneMusic');
+  v.innerHTML = ''; n.innerHTML = '';
+  m.querySelectorAll('.duck').forEach(e=>e.remove());
+
+  cut.forEach((c,i) => {
+    const b = document.createElement('div');
+    b.className = 'blk';
+    b.dataset.i = i;
+    b.style.left  = (c.s/TOTAL*100)+'%';
+    b.style.width = (c.d/TOTAL*100)+'%';
+    b.style.background = c.col;
+    b.textContent = c.d + 's';
+    v.appendChild(b);
+  });
+
+  narration.forEach(nr => {
+    const b = document.createElement('div');
+    b.className = 'narr';
+    b.style.left  = (nr.s/TOTAL*100)+'%';
+    b.style.width = (nr.d/TOTAL*100)+'%';
+    b.textContent = nr.d.toFixed(1)+'s speech';
+    n.appendChild(b);
+
+    const d = document.createElement('div');
+    d.className = 'duck';
+    d.style.left  = ((nr.s-0.4)/TOTAL*100)+'%';
+    d.style.width = ((nr.d+1.0)/TOTAL*100)+'%';
+    d.textContent = 'duck';
+    m.appendChild(d);
+  });
+}
+
+function buildSolver(){
+  const wrap = document.getElementById('solverRows');
+  wrap.innerHTML = '';
+  cut.forEach(c => {
+    const r = document.createElement('div');
+    r.className = 'srow';
+    r.innerHTML = `
+      <span class="sname">${c.name}</span>
+      <span class="sclass ${classCss[c.cls]}">${classLabel[c.cls]}</span>
+      <span class="sdur">${c.d}s</span>`;
+    wrap.appendChild(r);
+  });
+  const tot = document.createElement('div');
+  tot.className = 'srow';
+  tot.style.borderTop = '1px solid rgba(255,255,255,.18)';
+  tot.innerHTML = `<span class="sname" style="font-weight:800">Total</span>
+                   <span class="sdur" style="color:var(--gold);font-weight:700">${cut.reduce((a,c)=>a+c.d,0)}s</span>`;
+  wrap.appendChild(tot);
+}
+
+function fmt(x){
+  const m = Math.floor(x/60), s = Math.floor(x%60);
+  return `${m}:${s.toString().padStart(2,'0')}`;
+}
+
+function render(){
+  const cur = cut.find(c => t >= c.s && t < c.s + c.d) || cut[cut.length-1];
+
+  document.getElementById('fKicker').textContent = cur.kicker;
+  document.getElementById('fIcon').textContent   = cur.icon;
+  document.getElementById('fTitle').textContent  = cur.name;
+  document.getElementById('fNote').textContent   = cur.note;
+  document.getElementById('frame').style.background = cur.bg;
+
+  // burned-in elements
+  document.getElementById('statChip').classList.toggle('show', cur.id === 5);
+  document.getElementById('endCard').classList.toggle('show', cur.id === 7.5 || cur.id === 3.5);
+
+  // live caption from the narration lane
+  const nr = narration.find(n => t >= n.s && t < n.s + n.d);
+  const cap = document.getElementById('subCap');
+  cap.classList.toggle('show', !!nr);
+  cap.textContent = nr ? nr.text : '';
+
+  // dim every picture block except the one playing
+  document.querySelectorAll('#laneVideo .blk').forEach(b => {
+    b.classList.toggle('dim', cut[+b.dataset.i] !== cur);
+  });
+
+  const pct = t/TOTAL;
+  document.getElementById('scrubFill').style.width = (pct*100)+'%';
+  document.getElementById('tc').textContent = `${fmt(t)} / 1:00`;
+  document.getElementById('tcOverlay').textContent = fmt(t);
+
+  const tr = document.getElementById('tracks');
+  document.getElementById('playhead').style.left = (14 + pct*(tr.clientWidth-28))+'px';
+}
+
+function loop(ts){
+  if (!playing) return;
+  if (last === null) last = ts;
+  t += (ts - last)/1000;
+  last = ts;
+  if (t >= TOTAL){ t = TOTAL; playing = false; document.getElementById('playBtn').textContent='↻'; }
+  render();
+  if (playing) requestAnimationFrame(loop);
+}
+
+document.getElementById('playBtn').onclick = () => {
+  if (t >= TOTAL) t = 0;
+  playing = !playing;
+  document.getElementById('playBtn').textContent = playing ? '❚❚' : '▶';
+  last = null;
+  if (playing) requestAnimationFrame(loop);
+};
+
+document.getElementById('scrub').onclick = e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  t = Math.max(0, Math.min(TOTAL, (e.clientX-r.left)/r.width*TOTAL));
+  render();
+};
+
+buildLanes(); buildSolver(); render();
+window.addEventListener('resize', render);
+</script>
+</body>
+</html>
