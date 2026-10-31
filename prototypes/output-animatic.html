@@ -239,7 +239,7 @@
       <div class="sub-caption" id="subCap"></div>
       <div class="overlay-card" id="endCard">
         <div class="overlay-head">Before you go</div>
-        <div class="overlay-row"><span>Height minimum</span><b>44 in</b></div>
+        <div class="overlay-row"><span>Height minimum</span><b>40 in</b></div>
         <div class="overlay-row"><span>Park hours</span><b>8 AM – 12 AM</b></div>
         <div class="overlay-row"><span>Lockers</span><b>Left of main entrance</b></div>
       </div>
@@ -294,13 +294,13 @@ const cut = [
    icon:"🎪", note:"Pre-built title card. Same every video.", cls:"locked",  col:"#F5B942", bg:"#2A2038"},
   {s:3,  d:6,  id:2,   name:"Walking In",          kicker:"Scene 2 · Walk-in",
    icon:"🚶", note:"Auto-trimmed to the steadiest 6s. Entrance sign in frame.", cls:"elastic", col:"#3DDC97", bg:"#1B2430"},
-  {s:9,  d:8,  id:3,   name:"The Queue",           kicker:"Scene 3 · Queue",
-   icon:"📸", note:"3 photos, 2.7s each, Ken Burns drift.", cls:"elastic", col:"#3DDC97", bg:"#241F2E"},
-  {s:17, d:2,  id:3.5, name:"Height Sign",         kicker:"Scene 3b · Height sign",
-   icon:"📏", note:"Held 2s — long enough to read 44 in.", cls:"elastic", col:"#3DDC97", bg:"#1F2432"},
-  {s:19, d:5,  id:4,   name:"Pre-Ride Check-In",   kicker:"Scene 4 · Narration",
+  {s:9,  d:5,  id:3,   name:"The Queue",           kicker:"Scene 3 · Queue",
+   icon:"📸", note:"3 photos, 1.7s each, Ken Burns drift.", cls:"elastic", col:"#3DDC97", bg:"#241F2E"},
+  {s:14, d:2,  id:3.5, name:"Height Sign",         kicker:"Scene 3b · Height sign",
+   icon:"📏", note:"Held 2s — long enough to read 40 in.", cls:"elastic", col:"#3DDC97", bg:"#1F2432"},
+  {s:16, d:5,  id:4,   name:"Pre-Ride Check-In",   kicker:"Scene 4 · Narration",
    icon:"😬", note:"Hold = 0.4s lead + 4.0s speech + 0.6s tail.", cls:"narr", col:"#9B8CFF", bg:"#241F38"},
-  {s:24, d:22, id:5,   name:"The Ride",            kicker:"Scene 5 · Payload",
+  {s:21, d:25, id:5,   name:"The Ride",            kicker:"Scene 5 · Payload",
    icon:"🎢", note:"Window picked off the accelerometer spike. Floor: 18s.", cls:"floor", col:"#FF5470", bg:"#301A26"},
   {s:46, d:6,  id:6,   name:"Post-Ride Reaction",  kicker:"Scene 6 · Reaction",
    icon:"😂", note:"VAD found the laugh. Trimmed to the burst.", cls:"elastic", col:"#3DDC97", bg:"#2B2233"},
@@ -313,7 +313,7 @@ const cut = [
 // narration spans — these MEASURE first, then dictate the hold above
 const narration = [
   {s:3.6, d:4.2, text:"Okay — Space Mountain. I have not ridden this since I was twelve."},
-  {s:19.4,d:4.0, text:"Nervous? Honestly a seven. Maybe an eight."},
+  {s:16.4,d:4.0, text:"Nervous? Honestly a seven. Maybe an eight."},
   {s:52.4,d:4.0, text:"Ten out of ten. Go ride it. Bring a locker key."},
 ];
 

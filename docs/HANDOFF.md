@@ -5,14 +5,69 @@ Target: media captured → finished video in **under 60 seconds of assembly time
 
 ## Files in this folder
 
-| File | What it is |
+| Path | What it is |
 |---|---|
-| `scenecue_prototype.html` | Clickable capture-flow prototype (shot list, defer logic, ride data override) |
-| `scenecue_animatic.html` | Playable animatic of the assembled 60-second output + budget solver |
-| `HANDOFF.md` | This doc — decisions that live nowhere else |
+| `prototypes/capture-flow.html` | Working prototype: capture, trim, plan, and real video render |
+| `prototypes/output-animatic.html` | Playable animatic of the intended 60-second output |
+| `docs/HANDOFF.md` | This doc, the decisions that live nowhere else |
 
-Both HTML files are throwaway design references. The parts worth porting are the
-**scene data model**, the **elasticity classes**, and the **budget solver order**.
+Both HTML files are design references. The parts worth porting are the
+**scene data model**, the **elasticity classes**, and the **budget solver**.
+
+## Prototype build state
+
+`capture-flow.html` is no longer a mockup. It does the following for real:
+
+- **Capture:** camera video and photos (scene 3 takes up to 3 photos, minimum 2), plus upload.
+  Video-only on the payload scene. Defer and resurface logic for scene 4.
+- **Trim:** shown for every video clip. A live preview plays only the kept window. The
+  window slides (slip edit) or resizes from either edge, with the budget impact shown.
+- **Analysis:** loudness per half second from the microphone (measured live while recording,
+  or decoded from uploads), speech start and end, and phone motion sensors when available.
+  Narration scenes set their hold to 0.4s lead + speech + 0.6s tail.
+- **Plan:** the budget solver divides 60s across scenes and shows each result.
+- **Render:** the browser draws the cut to a canvas and records it with a synthesized
+  music bed that ducks under speech, clip audio, intro bumper (4 styles), stat chips,
+  and an end card built from the confirmed ride info.
+- **Safety gate:** the render is blocked until the height minimum is confirmed.
+
+### Solver behavior
+
+Locked scenes reserve first, narration scenes claim what the speech needs, the payload
+keeps its floor, and elastic scenes absorb the rest. Over budget: elastic scenes shrink,
+then the payload shrinks to its floor. Under budget: the payload grows, then elastic
+scenes, each up to the footage available. If footage runs out the cut is shorter than 60s
+and the screen says so.
+
+### What was tested
+
+- Solver: 2000 randomized cases. Total reached 60s within 0.05s and every scene stayed
+  inside its limits whenever the fixed scenes fit.
+- Speech detection: a clip with speech at 3.0s to 6.2s was found at 3.0s to 6.25s, giving
+  a 4.3s hold. Silence and a single click were correctly ignored.
+- Render from uploaded clips: clip audio appeared in the expected scenes of the final mix.
+- Music ducking, measured in an isolated offline render: about 15 dB lower under speech and
+  about 7 dB lower under the ride.
+- Capture flow: photo counter, finish-early button, video-only enforcement, trim drag and
+  resize, and the preview all worked against uploaded clips.
+
+### What was not tested
+
+- **Recording from a camera.** The simulated camera used for testing returned zero bytes
+  to the recorder even in a bare test page, so camera recording is unverified. The app
+  shows a clear message if a recording comes back empty.
+- **Full-resolution render quality and frame rate.** The test machine had one CPU core
+  and could not keep up with encoding 720x1280 video in real time.
+- **Motion sensors on a real ride.** No device was available.
+- **Safari and Firefox.**
+
+### Known limits
+
+- The browser render runs in real time and needs the tab to stay open.
+- Output is mp4 only when the browser can write H.264, otherwise WebM.
+- Ride data values are sample data. Only the Space Mountain height (40 in at Disneyland)
+  was checked against published sources. An earlier placeholder of 44 in was the Walt
+  Disney World figure and was wrong for Disneyland.
 
 ---
 
@@ -38,10 +93,10 @@ decision points, and background rendering while the creator is still previewing.
 |---|---|---|---|---|
 | 1 | Intro Bumper | none (pre-built, user picks style) | 3s | Locked |
 | 2 | Walking In | selfie video, entrance sign in frame | 6s | Elastic |
-| 3 | Queue | 3 photos (2 minimum — see open questions) | 8s | Elastic |
+| 3 | Queue | 3 photos (2 minimum) | 5s | Elastic |
 | 3b | Height Sign | 1 photo, or use ride database | 2s | Elastic |
 | 4 | Pre-Ride Check-In | selfie video, app-fed prompt | 5s | Narration-driven |
-| 5 | **The Ride — PAYLOAD** | ~40s raw video, **video only** | 22s | Floored (min 18s) |
+| 5 | **The Ride — PAYLOAD** | ~40s raw video, **video only** | 25s | Floored (min 18s) |
 | 6 | Post-Ride Reaction | selfie video, unscripted, no prompt | 6s | Elastic |
 | 7 | Sign-Off | selfie video, short goodbye | 5s | Narration-driven |
 | 7b | End Card | none (ride data burned in) | 3s | Locked |
@@ -199,8 +254,9 @@ whether the full 60 gets watched.** Protect the hook.
 
 1. **Is the re-solve visible?** If scene 4's answer runs 7s instead of 4s, elastic scenes
    silently compress. Does the creator see that happen, or is it invisible?
-2. **Is photo count elastic?** Scene 3 at 8s = 3 photos × 2.7s. Compressed below ~4.5s
-   you'd want 2 photos, not 3 flashed. If so, capture spec becomes "3 photos (2 minimum)."
+2. **Is photo count elastic?** Partly decided. Capture accepts 2 or 3 photos. The solver keeps
+   each photo at least 1.5s, so 3 photos need 4.5s. It does not yet drop a photo to buy time,
+   so a squeezed queue stays at 3 photos.
 3. **Do ride-data corrections publish instantly or queue for moderation?** Prototype
    implies instant. Safety-critical fields may need N independent confirmations before
    overwriting an official-site value.

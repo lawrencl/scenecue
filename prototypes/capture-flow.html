@@ -136,8 +136,17 @@
   .stub.done{ opacity:0.55; }
   .stub.deferred{ border-color:rgba(155,140,255,0.4); }
   .stub.current{
-    border-color:rgba(245,185,66,0.5);
-    box-shadow:0 0 0 1px rgba(245,185,66,0.25), 0 8px 20px -8px rgba(245,185,66,0.3);
+    border-color:var(--gold);
+    box-shadow:0 0 0 1px var(--gold), 0 0 14px 2px rgba(245,185,66,0.55), 0 0 32px 6px rgba(245,185,66,0.25);
+    animation:nextUpGlow 1.8s ease-in-out infinite;
+  }
+  @keyframes nextUpGlow{
+    0%,100%{
+      box-shadow:0 0 0 1px var(--gold), 0 0 12px 2px rgba(245,185,66,0.45), 0 0 26px 4px rgba(245,185,66,0.2);
+    }
+    50%{
+      box-shadow:0 0 0 1px var(--gold), 0 0 20px 5px rgba(245,185,66,0.75), 0 0 44px 10px rgba(245,185,66,0.35);
+    }
   }
   .stub-num{
     width:56px;
@@ -628,6 +637,137 @@
     color:var(--gold);
   }
 
+  .rec-pill.over{ background:rgba(245,185,66,0.92); color:var(--ink); }
+  .rec-pill.over .rec-dot{ background:var(--ink); }
+
+  .trim-intro{
+    margin:0 20px 14px;
+    font-size:12.5px;
+    color:var(--text-dim);
+    line-height:1.5;
+  }
+  .trim-card{
+    margin:0 20px 16px;
+    background:var(--surface);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:18px;
+    padding:16px;
+  }
+  .trim-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
+  }
+  .trim-range{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    color:var(--text);
+  }
+  .trim-track{
+    position:relative;
+    height:92px;
+    border-radius:12px;
+    background:var(--surface-2);
+    touch-action:none;
+    user-select:none;
+    overflow:hidden;
+  }
+  .trim-bars{
+    position:absolute;
+    inset:6px 0;
+    display:flex;
+    align-items:flex-end;
+    gap:2px;
+    padding:0 2px;
+    pointer-events:none;
+  }
+  .trim-bar{
+    flex:1;
+    background:rgba(255,255,255,0.22);
+    border-radius:2px;
+    min-width:2px;
+  }
+  .trim-window{
+    position:absolute;
+    top:0;
+    bottom:0;
+    background:rgba(245,185,66,0.2);
+    border-top:2px solid var(--gold);
+    border-bottom:2px solid var(--gold);
+    cursor:grab;
+    box-shadow:0 0 14px rgba(245,185,66,0.35);
+  }
+  .trim-window:active{ cursor:grabbing; }
+  .trim-handle{
+    position:absolute;
+    top:-2px;
+    bottom:-2px;
+    width:16px;
+    background:var(--gold);
+    cursor:ew-resize;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .trim-handle::after{
+    content:'';
+    width:2px;
+    height:20px;
+    background:var(--ink);
+    border-radius:2px;
+    opacity:0.7;
+    pointer-events:none;
+  }
+  .trim-handle.l{ left:-2px; border-radius:8px 0 0 8px; }
+  .trim-handle.r{ right:-2px; border-radius:0 8px 8px 0; }
+  .trim-legend{
+    margin-top:10px;
+    font-size:11px;
+    color:var(--text-faint);
+  }
+  .trim-budget{
+    margin-top:12px;
+    padding:10px 12px;
+    border-radius:10px;
+    font-size:12px;
+    line-height:1.4;
+  }
+  .trim-budget.ok{ background:rgba(61,220,151,0.12); color:var(--green); }
+  .trim-budget.over{ background:rgba(245,185,66,0.14); color:var(--gold); }
+  .trim-budget.under{ background:rgba(255,255,255,0.06); color:var(--text-dim); }
+
+  .stub-list{ padding-bottom:14px; }
+  .ghost-btn{ margin:0 16px 24px; background:none; border:1px dashed rgba(255,255,255,0.18); color:var(--text-faint); font-family:'Manrope'; font-size:11.5px; padding:10px; border-radius:12px; cursor:pointer; }
+  .cam-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .cam-msg{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; text-align:center; padding:22px; font-size:12.5px; line-height:1.5; color:var(--text-dim); background:rgba(10,8,14,0.72); z-index:1; }
+  .rec-pill{ z-index:2; }
+  .photo-line{ margin:0 20px 10px; font-family:'Space Mono',monospace; font-size:11px; color:var(--gold); }
+  .trim-preview-row{ display:flex; gap:12px; align-items:flex-end; margin-bottom:14px; }
+  #trimPreview{ width:108px; height:192px; border-radius:12px; background:#000; border:1px solid rgba(255,255,255,0.1); flex-shrink:0; }
+  .trim-preview-side{ flex:1; display:flex; flex-direction:column; gap:8px; }
+  .trim-signal{ margin-top:6px; font-size:11px; color:var(--text-faint); line-height:1.4; }
+  .trim-bar.speech{ background:var(--violet); }
+  .screen.plan-screen{ align-items:stretch; justify-content:flex-start; text-align:left; padding:0; gap:0; }
+  .plan-card{ margin:0 20px 14px; background:var(--surface); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:6px 14px; }
+  .plan-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid rgba(255,255,255,0.05); }
+  .plan-row:first-child{ border-top:none; }
+  .plan-name{ flex:1; font-size:13px; font-weight:700; color:var(--text); display:flex; flex-direction:column; gap:2px; }
+  .plan-note{ font-size:10.5px; font-weight:500; color:var(--text-faint); }
+  .plan-dur{ font-family:'Space Mono',monospace; font-size:12px; color:var(--text-dim); width:44px; text-align:right; }
+  .plan-total{ border-top:1px solid rgba(255,255,255,0.18); }
+  .plan-warn{ font-size:11.5px; color:var(--gold); padding:8px 0 6px; line-height:1.4; }
+  .gate-card{ margin:0 20px 14px; padding:14px; border-radius:16px; border:1px solid rgba(245,185,66,0.45); background:rgba(245,185,66,0.08); font-size:12.5px; line-height:1.5; color:var(--text); }
+  .gate-card button{ margin-top:10px; }
+  .render-card, .result-card{ margin:0 20px 14px; background:var(--surface); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:14px; text-align:center; }
+  #renderCanvas{ width:150px; height:267px; border-radius:12px; background:#000; }
+  .render-bar{ height:6px; border-radius:6px; background:var(--surface-2); margin:12px 0 8px; overflow:hidden; }
+  #renderFill{ height:100%; width:0%; background:linear-gradient(90deg,var(--gold),var(--red)); }
+  .render-status{ font-size:12px; color:var(--text-dim); }
+  #resultVideo{ width:100%; max-height:420px; border-radius:12px; background:#000; }
+  .result-meta{ font-size:11px; color:var(--text-faint); line-height:1.5; margin:10px 0; text-align:left; }
+  a.done-btn{ display:block; text-align:center; text-decoration:none; margin-top:0; }
+
   .toast{
     position:absolute;
     bottom:22px;
@@ -674,6 +814,7 @@
     </div>
 
     <div class="stub-list" id="stubList"></div>
+    <button class="ghost-btn" onclick="fillSamples()">Test mode: fill every unfinished scene with sample footage</button>
   </div>
 
   <!-- ============ SCREEN 1b: INTRO PICKER ============ -->
@@ -701,10 +842,53 @@
     <div class="ridedata-note">
       We pulled this from public sources. Check anything marked <span class="tag verify">VERIFY</span> before it goes on screen.
     </div>
+    <div class="ridedata-note" style="color:var(--text-faint);margin-top:-6px;">
+      Prototype note: these values are sample data, not live scrapes. Only the height has been checked against published sources.
+    </div>
     <div class="field-list" id="fieldList"></div>
     <div class="capture-controls">
       <button class="rec-btn" id="confirmAllBtn" onclick="confirmRideData()">✓ Confirm & Use</button>
-      <button class="secondary-btn" onclick="goList()">Cancel</button>
+      <button class="secondary-btn" onclick="goList()">Back</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 1d: TRIM ============ -->
+  <div class="screen" id="screen-trim">
+    <div class="statusbar"><span>9:41</span><span>SceneCue</span></div>
+    <div class="capture-top">
+      <button class="back-btn" onclick="retakeFromTrim()">← Retake</button>
+      <div class="capture-num" id="trimNum">Scene 2 of 7</div>
+      <div class="capture-title" id="trimTitle">Trim</div>
+    </div>
+    <div class="trim-intro" id="trimIntro"></div>
+
+    <div class="trim-card">
+      <div class="trim-preview-row">
+        <canvas id="trimPreview" width="216" height="384"></canvas>
+        <div class="trim-preview-side">
+          <button class="secondary-btn" id="trimPlayBtn" onclick="previewToggle()">▶ Preview window</button>
+        </div>
+      </div>
+      <div class="trim-head">
+        <span class="trim-range" id="trimRange">0.0s to 6.0s</span>
+        <span class="tag gold" id="trimLen">6.0s kept</span>
+      </div>
+      <div class="trim-track" id="trimTrack">
+        <div class="trim-bars" id="trimBars"></div>
+        <div class="trim-window" id="trimWindow" data-drag="move">
+          <div class="trim-handle l" data-drag="l"></div>
+          <div class="trim-handle r" data-drag="r"></div>
+        </div>
+      </div>
+      <div class="trim-legend">Bar height shows how much is happening. Violet bars are speech.</div>
+      <div class="trim-signal" id="trimSignal"></div>
+      <div class="trim-budget ok" id="trimBudget"></div>
+    </div>
+
+    <div class="capture-controls">
+      <button class="rec-btn" onclick="confirmTrim()">✓ Use This Cut</button>
+      <button class="secondary-btn gold-btn" id="trimAutoBtn" onclick="resetTrim()">Reset to auto-pick</button>
+      <button class="secondary-btn" onclick="retakeFromTrim()">Discard and retake</button>
     </div>
   </div>
 
@@ -722,12 +906,16 @@
       <button class="mode-btn" id="modePhotoBtn" onclick="setMode('photo')">📷 Photo</button>
     </div>
 
+    <div class="photo-line" id="photoLine" style="display:none;"></div>
+
     <div class="prompt-card" id="promptCard" style="display:none;">
       <div class="prompt-label">SceneCue feeds you this line</div>
       <div class="prompt-line" id="promptLine">"On a scale of 1 to 10 — how nervous are you right now?"</div>
     </div>
 
     <div class="viewfinder" id="viewfinder">
+      <video id="camVideo" class="cam-video" playsinline muted autoplay style="display:none;"></video>
+      <div class="cam-msg" id="camMsg" style="display:none;"></div>
       <div class="rec-pill" id="recPill" style="display:none;">
         <div class="rec-dot pulsing"></div><span id="recTimer">0:00</span>
       </div>
@@ -736,20 +924,49 @@
 
     <div class="capture-controls">
       <button class="rec-btn" id="recBtn" onclick="toggleRecord()">● Start Recording</button>
+      <button class="secondary-btn gold-btn" id="finishPhotosBtn" onclick="finishPhotos()" style="display:none;">Finish with photos</button>
+      <button class="secondary-btn gold-btn" id="sampleBtn" onclick="useSampleForScene()" style="display:none;">Use sample footage for this scene</button>
       <button class="secondary-btn" id="uploadBtn" onclick="triggerUpload()">⬆ Upload from Library</button>
       <button class="secondary-btn gold-btn" id="rideInfoBtn" onclick="openRideData()" style="display:none;">📋 Review auto-filled ride info</button>
       <input type="file" id="fileInput" accept="image/*,video/*" style="display:none;" onchange="handleFileUpload(event)">
       <button class="secondary-btn violet" id="deferBtn" onclick="deferScene()" style="display:none;">Skip — ask me after the ride</button>
-      <button class="secondary-btn" onclick="goList()">Cancel</button>
+      <button class="secondary-btn" onclick="goList()">Back</button>
     </div>
   </div>
 
-  <!-- ============ SCREEN 3: ALL DONE ============ -->
-  <div class="screen done-screen" id="screen-done">
-    <div class="done-badge">✓</div>
-    <div class="done-title">All 7 scenes captured</div>
-    <div class="done-sub">SceneCue is assembling your 60-second cut — intro, queue, ride, and your check-in are slotting into place.</div>
-    <button class="done-btn" onclick="restart()">Watch a New Ride</button>
+  <!-- ============ SCREEN 3: ASSEMBLE ============ -->
+  <div class="screen plan-screen" id="screen-done">
+    <div class="statusbar"><span>9:41</span><span>SceneCue</span></div>
+    <div class="capture-top">
+      <button class="back-btn" onclick="editScenes()">← Edit scenes</button>
+      <div class="capture-num">All scenes captured</div>
+      <div class="capture-title">Your 60-second cut</div>
+    </div>
+
+    <div class="gate-card" id="gateCard" style="display:none;">
+      The height minimum is safety-critical. Confirm it before it goes on the end card.
+      <button class="secondary-btn gold-btn" style="width:100%;" onclick="openRideData()">📋 Review ride info</button>
+    </div>
+
+    <div class="plan-card" id="planCard"></div>
+
+    <div class="render-card" id="renderCard" style="display:none;">
+      <canvas id="renderCanvas" width="720" height="1280"></canvas>
+      <div class="render-bar"><div id="renderFill"></div></div>
+      <div class="render-status" id="renderStatus"></div>
+      <div class="render-status" style="margin-top:6px;color:var(--text-faint);">Keep this tab open while it renders.</div>
+    </div>
+
+    <div class="result-card" id="resultCard" style="display:none;">
+      <video id="resultVideo" controls playsinline></video>
+      <div class="result-meta" id="resultMeta"></div>
+      <a class="done-btn" id="downloadLink" download>⬇ Download video</a>
+    </div>
+
+    <div class="capture-controls">
+      <button class="rec-btn" id="assembleBtn" onclick="assemble()">▶ Assemble video</button>
+      <button class="secondary-btn" onclick="restart()">Start a new ride</button>
+    </div>
   </div>
 
   <div class="toast" id="toast"><div class="toast-dot"></div><span id="toastText">Scene saved</span></div>
@@ -759,10 +976,10 @@
 const scenes = [
   {id:1, title:"Intro Bumper", sub:"Pre-built — pick your intro style", type:"reused", req:[{t:"AUTO",c:"gold"}], capturable:false, dur:0, allowTypes:[]},
   {id:2, title:"Walking In", sub:"Selfie video at the entrance sign", type:"video", req:[{t:"VIDEO OR PHOTO",c:"video"},{t:"~6 seconds",c:"time"}], capturable:true, dur:6, prompt:null, allowTypes:["video","photo"]},
-  {id:3, title:"Queue", sub:"3 photos of the line + wait-time sign", type:"photo", req:[{t:"3 PHOTOS",c:"photo"},{t:"OR VIDEO",c:"video"},{t:"~8 seconds",c:"time"}], capturable:true, dur:8, prompt:null, allowTypes:["photo","video"]},
+  {id:3, title:"Queue", sub:"3 photos of the line + wait-time sign", type:"photo", req:[{t:"3 PHOTOS",c:"photo"},{t:"OR VIDEO",c:"video"},{t:"~5 seconds",c:"time"}], capturable:true, dur:5, prompt:null, allowTypes:["photo","video"]},
   {id:3.5, title:"Height Sign", sub:"1 clear photo — or use our auto-filled height data", type:"photo", req:[{t:"1 PHOTO",c:"photo"},{t:"OR VIDEO",c:"video"},{t:"~2 seconds",c:"time"}], capturable:true, dur:2, prompt:null, allowTypes:["photo","video"], usesRideData:true},
   {id:4, title:"Pre-Ride Check-In", sub:"Answer live, or defer until after", type:"video", req:[{t:"VIDEO OR PHOTO",c:"video"},{t:"CAN DEFER",c:"deferred"},{t:"~5 seconds",c:"time"}], capturable:true, dur:5, prompt:"\u201cOn a scale of 1 to 10 \u2014 how nervous are you right now?\u201d", deferrable:true, allowTypes:["video","photo"]},
-  {id:5, title:"The Ride — Payload Scene", sub:"Board \u2192 ride \u2192 exit, one continuous take. This is the payload — the moment the whole video is built around, so no photo fallback.", type:"video", req:[{t:"~40s RAW",c:"video"},{t:"PAYLOAD",c:"gold"},{t:"~22 seconds",c:"time"}], capturable:true, dur:22, prompt:null, allowTypes:["video"]},
+  {id:5, title:"The Ride — Payload Scene", sub:"Board \u2192 ride \u2192 exit, one continuous take. This is the payload — the moment the whole video is built around, so no photo fallback.", type:"video", req:[{t:"~40s RAW",c:"video"},{t:"PAYLOAD",c:"gold"},{t:"~25 seconds",c:"time"}], capturable:true, dur:25, prompt:null, allowTypes:["video"]},
   {id:6, title:"Post-Ride Reaction", sub:"Unscripted — however you actually feel", type:"video", req:[{t:"VIDEO OR PHOTO",c:"video"},{t:"~6 seconds",c:"time"}], capturable:true, dur:6, prompt:null, allowTypes:["video","photo"]},
   {id:7, title:"Sign-Off", sub:"Short goodbye line to camera", type:"video", req:[{t:"VIDEO OR PHOTO",c:"video"},{t:"~5 seconds",c:"time"}], capturable:true, dur:5, prompt:"\u201cSay a quick goodbye \u2014 we\u2019ll add hours & height info on screen.\u201d", allowTypes:["video","photo"], usesRideData:true},
 ];
@@ -770,7 +987,7 @@ const scenes = [
 // Ride data: split by how costly a wrong value is.
 // tier1 = structured API, tier2 = official site, tier3 = community wiki, user = creator override
 const rideData = [
-  {key:"height", label:"Height Minimum", value:"44 in (112 cm)", source:"Disneyland official site", tier:2,
+  {key:"height", label:"Height Minimum", value:"40 in (102 cm)", source:"Disneyland official site", tier:2,
    critical:true, confirmed:false, note:"Safety-critical — always confirm before it goes on screen."},
   {key:"hours", label:"Park Hours Today", value:"8:00 AM – 12:00 AM", source:"ThemeParks.wiki API", tier:1,
    volatile:true, confirmed:false, freshness:"as of 6:12 AM today"},
@@ -846,8 +1063,8 @@ function renderList(){
 
   // check completion
   const allDone = scenes.every(s => state[s.id] === 'done');
-  if (allDone) {
-    setTimeout(()=> showScreen('screen-done'), 400);
+  if (allDone && !suppressDone) {
+    setTimeout(()=> enterDone(), 400);
   }
 }
 
@@ -857,6 +1074,8 @@ function isNextUp(scene){
 }
 
 function showScreen(id){
+  if (id !== 'screen-capture') stopCamera();
+  if (id !== 'screen-trim') stopPreview();
   document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
@@ -906,6 +1125,22 @@ function editField(i, val){
   rideData[i].source = "You edited this";
   rideData[i].tier = "user";
   rideData[i].confirmed = true;
+
+  // update the card in place so the badge and source reflect the edit
+  // without re-rendering (which would drop focus while typing)
+  const card = document.querySelectorAll('#fieldList .field')[i];
+  if (!card) return;
+  card.classList.remove('needs-verify','conflict');
+  card.classList.add('confirmed');
+  const head = card.querySelector('.field-head');
+  let tag = head.querySelector('.tag');
+  if (!tag){ tag = document.createElement('span'); head.appendChild(tag); }
+  tag.className = 'tag ok';
+  tag.textContent = 'EDITED BY YOU';
+  const src = card.querySelector('.field-source');
+  if (src) src.textContent = '📍 You edited this';
+  const btn = card.querySelector('.mini-btn');
+  if (btn){ btn.classList.remove('primary'); btn.textContent = '✓ Confirmed'; }
 }
 
 function confirmField(i){
@@ -964,130 +1199,1301 @@ function selectIntro(id){
   showToast(`Intro set to ${style.name}`);
 }
 
+/* =====================================================================
+   REAL CAPTURE, TRIM, PLAN, AND ASSEMBLY
+   ===================================================================== */
+const BIN = 0.5;              // seconds per activity bin
+const MIN_CLIP = 1;
+const LEAD = 0.4, TAIL = 0.6; // narration lead-in and tail pad
+const LEGIBLE = 1.5;          // minimum seconds per photo or clip
+const BUDGET = 60;
+const OUT_W = 720, OUT_H = 1280;
+
+const META = {
+  1:  {cls:'locked'},
+  2:  {cls:'elastic', facing:'user', icon:'🚶'},
+  3:  {cls:'elastic', facing:'environment', photoMax:3, photoMin:2, icon:'📸'},
+  3.5:{cls:'elastic', facing:'environment', icon:'📏'},
+  4:  {cls:'narr', facing:'user', icon:'😬'},
+  5:  {cls:'floor', floor:18, facing:'environment', icon:'🎢'},
+  6:  {cls:'elastic', facing:'user', icon:'😂'},
+  7:  {cls:'narr', facing:'user', icon:'👋'},
+};
+scenes.forEach(s => Object.assign(s, META[s.id] || {}));
+
+let clips = {};          // sceneId -> {items:[...], trim:{start,len,raw}|null}
+let pending = [];        // photos captured so far for the current scene
+let captureMode = 'video';
+let suppressDone = false;
+let camStream = null, camToken = 0;
+let rec = null, recChunks = [], recStart = 0;
+let motionBuf = [];
+let currentItem = null;
+let plan = null;
+let assembling = false;
+let resultUrl = null;
+
+function $(id){ return document.getElementById(id); }
+function fmtClock(sec){
+  const s = Math.max(0, Math.floor(sec));
+  return `${Math.floor(s/60)}:${(s%60).toString().padStart(2,'0')}`;
+}
+function sceneLabel(s){ return s.title.replace(' — Payload Scene',''); }
+function rideVal(key){ const f = rideData.find(x => x.key === key); return f ? f.value : ''; }
+
+/* ---------- navigation ---------- */
 function goList(){
   stopRecordingUI();
   renderList();
   showScreen('screen-list');
 }
+function editScenes(){ suppressDone = true; goList(); }
+function completeScene(id, msg){
+  state[id] = 'done';
+  suppressDone = false;
+  plan = null;
+  invalidateResult();
+  showToast(msg);
+  setTimeout(()=> goList(), 550);
+}
+function enterDone(){
+  if (!scenes.every(s => state[s.id] === 'done')) return;
+  if (!$('screen-list').classList.contains('active')) return;
+  showScreen('screen-done');
+  renderDone();
+}
 
-let captureMode = 'video';
+/* ---------- camera ---------- */
+function stopCamera(){
+  camToken++;
+  if (camStream){ camStream.getTracks().forEach(t => t.stop()); camStream = null; }
+  const v = $('camVideo');
+  if (v){ v.srcObject = null; v.style.display = 'none'; }
+}
+async function startCamera(facing){
+  stopCamera();
+  const tok = camToken;
+  const vid = $('camVideo'), msg = $('camMsg');
+  msg.textContent = 'Starting camera. If your browser asks, allow camera and microphone access.';
+  msg.style.display = 'flex';
+  $('sampleBtn').style.display = 'none';
+  let err = '';
+  let stream = null;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    err = 'no camera access in this view';
+  } else {
+    const tries = [
+      {video:{facingMode:facing, width:{ideal:720}, height:{ideal:1280}}, audio:true},
+      {video:{facingMode:facing}, audio:false},
+    ];
+    for (const c of tries){
+      try { stream = await navigator.mediaDevices.getUserMedia(c); break; }
+      catch(e){ err = (e && e.name) ? e.name : 'error'; }
+    }
+  }
+  if (tok !== camToken){ if (stream) stream.getTracks().forEach(t => t.stop()); return; }
+  if (stream){
+    camStream = stream;
+    msg.style.display = 'none';
+    vid.srcObject = stream;
+    vid.style.transform = facing === 'user' ? 'scaleX(-1)' : 'none';
+    vid.style.display = 'block';
+    $('viewfinderIcon').style.display = 'none';
+    try { await vid.play(); } catch(e){}
+  } else {
+    $('viewfinderIcon').style.display = 'block';
+    msg.textContent = `Camera is not available here (${err}). Use Upload from Library or sample footage.`;
+    msg.style.display = 'flex';
+    $('sampleBtn').style.display = 'block';
+  }
+}
 
+/* ---------- capture screen ---------- */
 function openCapture(id, fromNudge){
   currentScene = scenes.find(s => s.id === id);
-  document.getElementById('capNum').textContent = `Scene ${id.toString().replace('.5','b')} of 7`;
-  document.getElementById('capTitle').textContent = currentScene.title;
+  pending = [];
+  $('capNum').textContent = `Scene ${id.toString().replace('.5','b')} of 7`;
+  $('capTitle').textContent = currentScene.title;
+  $('capReq').innerHTML = currentScene.req.map(r=>`<span class="tag ${r.c}">${r.t}</span>`).join('');
 
-  const reqWrap = document.getElementById('capReq');
-  reqWrap.innerHTML = currentScene.req.map(r=>`<span class="tag ${r.c}">${r.t}</span>`).join('');
-
-  const promptCard = document.getElementById('promptCard');
+  const promptCard = $('promptCard');
   if (currentScene.prompt){
     promptCard.style.display = 'block';
-    document.getElementById('promptLine').textContent = currentScene.prompt;
+    $('promptLine').textContent = currentScene.prompt;
   } else {
     promptCard.style.display = 'none';
   }
+  $('deferBtn').style.display = (currentScene.deferrable && !fromNudge) ? 'block' : 'none';
+  $('rideInfoBtn').style.display = currentScene.usesRideData ? 'block' : 'none';
 
-  document.getElementById('deferBtn').style.display = (currentScene.deferrable && !fromNudge) ? 'block' : 'none';
-  document.getElementById('rideInfoBtn').style.display = currentScene.usesRideData ? 'block' : 'none';
+  const toggle = $('modeToggle');
+  if (currentScene.allowTypes && currentScene.allowTypes.length > 1) toggle.classList.remove('hidden');
+  else toggle.classList.add('hidden');
 
-  // mode toggle: only show if the scene genuinely allows a choice
-  const toggle = document.getElementById('modeToggle');
-  if (currentScene.allowTypes && currentScene.allowTypes.length > 1){
-    toggle.classList.remove('hidden');
-  } else {
-    toggle.classList.add('hidden');
-  }
-  const defaultMode = (currentScene.allowTypes && currentScene.allowTypes[0]) || 'video';
-  setMode(defaultMode);
-
+  $('fileInput').multiple = !!currentScene.photoMax;
   stopRecordingUI();
+  setMode((currentScene.allowTypes && currentScene.allowTypes[0]) || 'video');
   showScreen('screen-capture');
+  startCamera(currentScene.facing || 'environment');
 }
 
 function setMode(mode){
   captureMode = mode;
-  document.getElementById('modeVideoBtn').classList.toggle('active', mode === 'video');
-  document.getElementById('modePhotoBtn').classList.toggle('active', mode === 'photo');
-  document.getElementById('viewfinderIcon').textContent = mode === 'video' ? '🎥' : '📷';
+  $('modeVideoBtn').classList.toggle('active', mode === 'video');
+  $('modePhotoBtn').classList.toggle('active', mode === 'photo');
   stopRecordingUI();
-  const btn = document.getElementById('recBtn');
-  btn.textContent = mode === 'video' ? '● Start Recording' : '📷 Take Photo';
+  updatePhotoUI();
+}
+
+function updatePhotoUI(){
+  const max = currentScene.photoMax || 1;
+  const multi = max > 1 && captureMode === 'photo';
+  const line = $('photoLine');
+  line.style.display = multi ? 'block' : 'none';
+  if (multi) line.textContent = `Photo ${Math.min(pending.length+1, max)} of ${max} (${currentScene.photoMin} minimum)`;
+  $('finishPhotosBtn').style.display = (multi && pending.length >= currentScene.photoMin && pending.length < max) ? 'block' : 'none';
+  $('finishPhotosBtn').textContent = `Finish with ${pending.length} photos`;
+  if (!recording){
+    $('recBtn').textContent = captureMode === 'video' ? '● Start Recording' : '📷 Take Photo';
+  }
+}
+
+function updateRecPill(){
+  const target = currentScene.dur;
+  const pill = $('recPill');
+  const over = target > 0 && recSeconds > target;
+  pill.classList.toggle('over', over);
+  $('recTimer').textContent = `${fmtClock(recSeconds)} / ${fmtClock(target)}` + (over ? ' · over target' : '');
+}
+
+function pickMime(preferMp4){
+  // mp4 is only chosen when the browser can really write H.264 + AAC, which is what
+  // Instagram and TikTok accept. A generic mp4 can hide VP9 inside, so it is a last resort.
+  const h264 = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4;codecs=avc1,mp4a.40.2'];
+  const webm = ['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+  const list = (preferMp4 ? h264.concat(webm) : webm).concat(['video/mp4']);
+  if (!window.MediaRecorder) return '';
+  for (const t of list){ if (MediaRecorder.isTypeSupported(t)) return t; }
+  return '';
+}
+
+/* motion sensor (phones): feeds the highlight signal for the ride */
+function onMotion(e){
+  const a = e.accelerationIncludingGravity || e.acceleration;
+  if (!a || a.x == null) return;
+  motionBuf.push({t:(performance.now()-recStart)/1000, m:Math.abs(Math.hypot(a.x,a.y,a.z)-9.81)});
+}
+async function startMotion(){
+  motionBuf = [];
+  try{
+    if (typeof DeviceMotionEvent === 'undefined') return;
+    if (typeof DeviceMotionEvent.requestPermission === 'function'){
+      const r = await DeviceMotionEvent.requestPermission();
+      if (r !== 'granted') return;
+    }
+    window.addEventListener('devicemotion', onMotion);
+  }catch(e){}
+}
+function stopMotion(dur){
+  window.removeEventListener('devicemotion', onMotion);
+  const buf = motionBuf; motionBuf = [];
+  if (!dur || buf.length < 8) return null;
+  const n = Math.max(1, Math.ceil(dur/BIN));
+  const bins = new Array(n).fill(0);
+  buf.forEach(p => { const i = Math.min(n-1, Math.max(0, Math.floor(p.t/BIN))); bins[i] = Math.max(bins[i], p.m); });
+  return bins.map(m => Math.min(1, m/6));
+}
+
+/* live loudness meter: reads the microphone while recording, so speech detection
+   does not depend on the browser being able to decode its own recording */
+let meter = null;
+function startMeter(){
+  try {
+    const at = camStream && camStream.getAudioTracks()[0];
+    if (!at) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AC();
+    const src = ctx.createMediaStreamSource(new MediaStream([at]));
+    const an = ctx.createAnalyser();
+    an.fftSize = 2048;
+    src.connect(an);
+    const buf = new Float32Array(an.fftSize);
+    const frames = [];
+    const t0 = performance.now();
+    const timer = setInterval(() => {
+      an.getFloatTimeDomainData(buf);
+      let s = 0;
+      for (let i = 0; i < buf.length; i++) s += buf[i]*buf[i];
+      frames[Math.floor((performance.now()-t0)/50)] = Math.sqrt(s/buf.length);
+    }, 25);
+    meter = {ctx, timer, frames};
+  } catch(e){ meter = null; }
+}
+function stopMeter(){
+  if (!meter) return null;
+  clearInterval(meter.timer);
+  const fr = meter.frames;
+  try { meter.ctx.close(); } catch(e){}
+  meter = null;
+  if (!fr.length) return null;
+  const out = new Float32Array(fr.length);
+  let prev = 0;
+  for (let i = 0; i < fr.length; i++){ if (fr[i] !== undefined) prev = fr[i]; out[i] = prev; }
+  return out;
 }
 
 function toggleRecord(){
-  if (captureMode === 'photo'){
-    finishCapture('Photo saved');
-    return;
-  }
-  const btn = document.getElementById('recBtn');
-  const pill = document.getElementById('recPill');
-  if (!recording){
-    recording = true;
-    recSeconds = 0;
-    btn.textContent = '■ Stop & Save';
-    btn.classList.add('stop');
-    pill.style.display = 'flex';
-    recTimerInt = setInterval(()=>{
-      recSeconds++;
-      const m = Math.floor(recSeconds/60), s = recSeconds%60;
-      document.getElementById('recTimer').textContent = `${m}:${s.toString().padStart(2,'0')}`;
-    }, 1000);
-  } else {
-    finishCapture(`${currentScene.title} saved`);
-  }
+  if (captureMode === 'photo'){ takePhoto(); return; }
+  if (!recording) startRecording(); else stopRecording();
+}
+
+function startRecording(){
+  if (!camStream){ showToast('No camera here. Try Upload from Library or sample footage.'); return; }
+  const mime = pickMime(false);
+  try { rec = new MediaRecorder(camStream, mime ? {mimeType:mime} : undefined); }
+  catch(e){ showToast('Recording is not supported in this browser.'); rec = null; return; }
+  recChunks = [];
+  rec.ondataavailable = e => { if (e.data && e.data.size) recChunks.push(e.data); };
+  recStart = performance.now();
+  startMotion();                       // called inside the tap so iOS can ask permission
+  rec.start(250);
+  startMeter();
+  recording = true;
+  recSeconds = 0;
+  $('recBtn').textContent = '■ Stop & Trim';
+  $('recBtn').classList.add('stop');
+  $('recPill').style.display = 'flex';
+  updateRecPill();
+  recTimerInt = setInterval(()=>{
+    recSeconds = Math.floor((performance.now()-recStart)/1000);
+    updateRecPill();
+  }, 250);
+}
+
+function stopRecording(){
+  if (!rec) return;
+  const elapsed = (performance.now() - recStart) / 1000;
+  const r = rec; rec = null;
+  const mime = r.mimeType || 'video/webm';
+  const motion = stopMotion(elapsed);
+  const rms = stopMeter();
+  clearInterval(recTimerInt);
+  recording = false;
+  r.onstop = async () => {
+    const blob = new Blob(recChunks, {type: mime});
+    recChunks = [];
+    if (blob.size < 1000){
+      showToast('That recording came back empty. Try again, or use Upload from Library.');
+      stopRecordingUI();
+      return;
+    }
+    await openTrim({kind:'video', blob, url:URL.createObjectURL(blob), duration:Math.max(0.5, Math.round(elapsed*10)/10), mime, motion, rms});
+  };
+  try { r.stop(); } catch(e){}
 }
 
 function stopRecordingUI(){
+  if (rec){ try{ rec.onstop = null; rec.stop(); }catch(e){} rec = null; }
+  window.removeEventListener('devicemotion', onMotion);
+  stopMeter();
+  clearInterval(recTimerInt);
   recording = false;
-  clearInterval(recTimerInt);
   recSeconds = 0;
-  const btn = document.getElementById('recBtn');
+  const btn = $('recBtn');
   btn.classList.remove('stop');
-  document.getElementById('recPill').style.display = 'none';
-  document.getElementById('recTimer').textContent = '0:00';
+  const pill = $('recPill');
+  pill.style.display = 'none';
+  pill.classList.remove('over');
+  $('recTimer').textContent = '0:00';
+  btn.textContent = captureMode === 'video' ? '● Start Recording' : '📷 Take Photo';
 }
 
-function finishCapture(message){
-  clearInterval(recTimerInt);
-  state[currentScene.id] = 'done';
-  showToast(message || `${currentScene.title} saved`);
-  setTimeout(()=> goList(), 550);
+async function takePhoto(){
+  const v = $('camVideo');
+  if (!camStream || !v.videoWidth){ showToast('No camera here. Try Upload from Library or sample footage.'); return; }
+  const c = document.createElement('canvas');
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext('2d').drawImage(v, 0, 0);
+  const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.9));
+  addPhoto(blob);
+}
+function addPhoto(blob){
+  pending.push({kind:'image', blob, url:URL.createObjectURL(blob)});
+  const max = currentScene.photoMax || 1;
+  if (pending.length >= max) finishPhotos();
+  else { showToast(`Photo ${pending.length} of ${max} saved`); updatePhotoUI(); }
+}
+function finishPhotos(){
+  clips[currentScene.id] = {items: pending.slice(), trim: null};
+  pending = [];
+  completeScene(currentScene.id, `${currentScene.title} saved`);
 }
 
-function triggerUpload(){
-  document.getElementById('fileInput').click();
-}
+/* ---------- uploads ---------- */
+function triggerUpload(){ $('fileInput').click(); }
 
-function handleFileUpload(event){
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-  const isVideo = file.type.startsWith('video');
-  showToast(`Uploaded ${isVideo ? 'video' : 'photo'} for ${currentScene.title}`);
-  state[currentScene.id] = 'done';
-  setTimeout(()=> goList(), 550);
-  event.target.value = '';
+function fixDuration(v){
+  return new Promise(res => {
+    if (isFinite(v.duration)) return res();
+    let done = false;
+    const fin = () => { if (!done){ done = true; v.ontimeupdate = null; res(); } };
+    v.ontimeupdate = fin;
+    setTimeout(fin, 1500);
+    try { v.currentTime = 1e101; } catch(e){ fin(); }
+  });
+}
+function loadVideoMeta(url){
+  return new Promise(res => {
+    const v = document.createElement('video');
+    v.preload = 'metadata'; v.muted = true; v.playsInline = true;
+    v.onloadedmetadata = async () => {
+      await fixDuration(v);
+      res(isFinite(v.duration) ? v.duration : 0);
+    };
+    v.onerror = () => res(0);
+    v.src = url;
+  });
+}
+async function handleFileUpload(event){
+  const input = event.target;
+  const files = Array.from(input.files || []);
+  input.value = '';
+  if (!files.length) return;
+  const canVideo = currentScene.allowTypes.includes('video');
+  const canPhoto = currentScene.allowTypes.includes('photo');
+  const vf = files.find(f => f.type.startsWith('video'));
+  if (vf && canVideo){
+    const url = URL.createObjectURL(vf);
+    const d = await loadVideoMeta(url);
+    if (!d){ URL.revokeObjectURL(url); showToast("Couldn't read that video."); return; }
+    await openTrim({kind:'video', blob:vf, url, duration:Math.round(d*10)/10, mime:vf.type, motion:null});
+    return;
+  }
+  const imgs = files.filter(f => f.type.startsWith('image'));
+  if (!imgs.length || !canPhoto){ showToast(canPhoto ? 'Choose a photo or video.' : 'This scene needs a video.'); return; }
+  const max = currentScene.photoMax || 1;
+  for (const f of imgs){
+    if (pending.length >= max) break;
+    pending.push({kind:'image', blob:f, url:URL.createObjectURL(f)});
+  }
+  if (pending.length >= max || !currentScene.photoMax) finishPhotos();
+  else { showToast(`Photo ${pending.length} of ${max} saved`); updatePhotoUI(); }
 }
 
 function deferScene(){
   state[currentScene.id] = 'deferred';
-  showToast("Saved for later — we'll remind you");
+  showToast("Saved for later. We'll remind you");
   setTimeout(()=> goList(), 550);
 }
 
-function showToast(text){
-  document.getElementById('toastText').textContent = text;
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(()=> t.classList.remove('show'), 1800);
+/* =====================================================================
+   ANALYSIS: audio energy, speech span (voice activity), motion
+   ===================================================================== */
+async function decodeAudio(blob){
+  if (!blob || blob.size > 150*1024*1024) return null;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  const ctx = new AC();
+  try {
+    const buf = await blob.arrayBuffer();
+    return await new Promise((res, rej) => {
+      const p = ctx.decodeAudioData(buf, res, rej);
+      if (p && p.catch) p.catch(() => {});
+    });
+  } catch(e){ return null; }
+  finally { try { ctx.close(); } catch(e){} }
+}
+
+function rmsFrames(ab, frameSec){
+  const n = Math.floor(ab.sampleRate * frameSec);
+  const chs = [];
+  for (let c = 0; c < ab.numberOfChannels; c++) chs.push(ab.getChannelData(c));
+  const frames = Math.floor(ab.length / n);
+  const out = new Float32Array(frames);
+  for (let f = 0; f < frames; f++){
+    let s = 0, cnt = 0;
+    for (let c = 0; c < chs.length; c++){
+      const d = chs[c];
+      for (let i = f*n; i < (f+1)*n; i += 4){ s += d[i]*d[i]; cnt++; }
+    }
+    out[f] = Math.sqrt(s / Math.max(1, cnt));
+  }
+  return out;
+}
+
+// first-to-last speech in a clip, from per-frame loudness
+function speechSpan(rms, frameSec){
+  if (!rms.length) return null;
+  const sorted = Array.from(rms).sort((a,b)=>a-b);
+  const floor = sorted[Math.floor(sorted.length*0.2)];
+  const peak = sorted[Math.min(sorted.length-1, Math.floor(sorted.length*0.98))];
+  if (peak < 0.01) return null;
+  const thr = Math.max(0.008, floor*3, peak*0.2);
+  const segs = [];
+  let s = -1;
+  for (let i = 0; i <= rms.length; i++){
+    const on = i < rms.length && rms[i] > thr;
+    if (on && s < 0) s = i;
+    if (!on && s >= 0){ segs.push([s*frameSec, i*frameSec]); s = -1; }
+  }
+  const merged = [];
+  for (const sg of segs){
+    const last = merged[merged.length-1];
+    if (last && sg[0] - last[1] <= 0.5) last[1] = sg[1];
+    else merged.push([sg[0], sg[1]]);
+  }
+  const keep = merged.filter(m => m[1]-m[0] >= 0.25);
+  if (!keep.length) return null;
+  return {start: keep[0][0], end: keep[keep.length-1][1]};
+}
+
+function binsFromRms(rms, frameSec, n){
+  const per = Math.max(1, Math.round(BIN/frameSec));
+  const out = [];
+  for (let i = 0; i < n; i++){
+    let s = 0, c = 0;
+    for (let k = i*per; k < (i+1)*per && k < rms.length; k++){ s += rms[k]; c++; }
+    out.push(c ? s/c : 0);
+  }
+  let mx = 1e-6;
+  for (const v of out) if (v > mx) mx = v;
+  return out.map(v => Math.min(1, v/mx));
+}
+
+function resample(arr, n){
+  const out = new Array(n).fill(0);
+  for (let i = 0; i < n && i < arr.length; i++) out[i] = arr[i];
+  return out;
+}
+
+// stand-in signal when a clip has no audio or sensor data
+function sampleActivity(n, seed){
+  const out = [];
+  for (let i = 0; i < n; i++) out.push(Math.min(1, 0.28 + 0.5*Math.abs(Math.sin(i*0.7 + seed*2.1))));
+  const peak = Math.floor(n*0.55);
+  for (let k = -2; k <= 2; k++) if (out[peak+k] !== undefined) out[peak+k] = Math.min(1, out[peak+k] + 0.45);
+  return out;
+}
+
+async function analyzeItem(item){
+  if (item.analysis) return item.analysis;
+  const n = Math.max(1, Math.ceil(item.duration/BIN));
+  let audioBins = null, speech = null;
+  if (item.kind === 'video'){
+    let rms = item.rms || null;
+    if (!rms && item.blob){
+      const ab = await decodeAudio(item.blob);
+      if (ab) rms = rmsFrames(ab, 0.05);
+    }
+    if (rms && rms.length){
+      audioBins = binsFromRms(rms, 0.05, n);
+      speech = speechSpan(rms, 0.05);
+    }
+  }
+  const motionBins = item.motion ? resample(item.motion, n) : null;
+  item.analysis = {audioBins, motionBins, speech, n};
+  return item.analysis;
+}
+
+function activityFor(item, scene){
+  const a = item.analysis, n = a.n;
+  if (a.sample) return {act: a.audioBins, signal: 'sample footage (simulated signal)'};
+  if (a.motionBins && a.audioBins){
+    const wm = scene.cls === 'floor' ? 0.6 : 0.4;
+    return {act: a.motionBins.map((m,i) => wm*m + (1-wm)*a.audioBins[i]), signal: 'motion sensor + audio'};
+  }
+  if (a.motionBins) return {act: a.motionBins, signal: 'motion sensor'};
+  if (a.audioBins) return {act: a.audioBins, signal: 'audio loudness'};
+  return {act: sampleActivity(n, scene.id), signal: 'no audio or sensor data, so a placeholder pattern'};
+}
+
+function bestWindowStart(act, raw, len){
+  const n = act.length;
+  const lb = Math.max(1, Math.round(len/BIN));
+  const maxS = Math.max(0, n - lb);
+  let best = 0, bestSum = -1;
+  for (let s = 0; s <= maxS; s++){
+    let sum = 0;
+    for (let k = 0; k < lb && s+k < n; k++) sum += act[s+k];
+    if (sum > bestSum){ bestSum = sum; best = s; }
+  }
+  return Math.min(Math.max(0, raw - len), Math.round(best*BIN*10)/10);
+}
+
+function computeAuto(item, scene){
+  const a = item.analysis;
+  const {act, signal} = activityFor(item, scene);
+  const raw = item.duration, target = scene.dur;
+  let autoStart, autoLen, note;
+  if (scene.cls === 'narr' && a.speech){
+    autoStart = Math.max(0, a.speech.start - LEAD);
+    autoLen = Math.min(raw - autoStart, (a.speech.end - a.speech.start) + LEAD + TAIL);
+    note = `Speech found from ${a.speech.start.toFixed(1)}s to ${a.speech.end.toFixed(1)}s. The hold is a ${LEAD}s lead, the speech, and a ${TAIL}s tail, so this scene's length follows what you said.`;
+  } else {
+    autoLen = Math.min(target, raw);
+    autoStart = bestWindowStart(act, raw, autoLen);
+    note = scene.cls === 'narr'
+      ? `No speech detected, so we used the ${target}s budget and picked the strongest stretch.`
+      : `We picked the strongest ${autoLen.toFixed(1)}s using ${signal}.`;
+  }
+  autoStart = Math.round(autoStart*10)/10;
+  autoLen = Math.round(autoLen*10)/10;
+  return {act, signal, autoStart, autoLen, note};
+}
+
+/* =====================================================================
+   TRIM
+   ===================================================================== */
+let trim = null;
+let pv = null, pvPlaying = false, pvRaf = 0, previewT = 0, seekQueued = false, pvReady = Promise.resolve();
+
+async function openTrim(item){
+  currentItem = item;
+  showScreen('screen-trim');
+  $('trimNum').textContent = `Scene ${currentScene.id.toString().replace('.5','b')} of 7`;
+  $('trimTitle').textContent = `Trim: ${currentScene.title.replace(' — Payload Scene','')}`;
+  $('trimIntro').textContent = 'Analyzing your clip...';
+  $('trimBars').innerHTML = '';
+  const a = await analyzeItem(item);
+  const auto = computeAuto(item, currentScene);
+  trim = {raw:item.duration, start:auto.autoStart, len:auto.autoLen,
+          autoStart:auto.autoStart, autoLen:auto.autoLen, act:auto.act, signal:auto.signal, speech:a.speech};
+
+  $('trimIntro').textContent =
+    `You have ${item.duration.toFixed(1)}s of footage and this scene's budget is about ${currentScene.dur} seconds. ${auto.note} Drag the gold window to slide it, or drag its edges to make the scene longer or shorter.`;
+  $('trimSignal').textContent = `Signal used: ${auto.signal}.`;
+
+  const bars = $('trimBars');
+  bars.innerHTML = '';
+  trim.act.forEach((v, i) => {
+    const b = document.createElement('div');
+    const mid = (i + 0.5) * BIN;
+    const inSpeech = a.speech && mid >= a.speech.start && mid <= a.speech.end;
+    b.className = 'trim-bar' + (inSpeech ? ' speech' : '');
+    b.style.height = Math.round(14 + v*82) + '%';
+    bars.appendChild(b);
+  });
+  setupPreview();
+  renderTrim();
+}
+
+function renderTrim(){
+  const win = $('trimWindow');
+  win.style.left = (trim.start/trim.raw*100) + '%';
+  win.style.width = (trim.len/trim.raw*100) + '%';
+  $('trimRange').textContent = `${trim.start.toFixed(1)}s to ${(trim.start+trim.len).toFixed(1)}s`;
+  $('trimLen').textContent = `${trim.len.toFixed(1)}s kept`;
+
+  const target = currentScene.dur;
+  const diff = Math.round((trim.len - target)*10)/10;
+  const box = $('trimBudget');
+  box.className = 'trim-budget';
+  if (currentScene.cls === 'narr'){
+    box.classList.add('ok');
+    box.textContent = `Hold: ${trim.len.toFixed(1)}s. Other scenes will adjust so the cut stays at 60s.`;
+  } else if (Math.abs(diff) < 0.05){
+    box.classList.add('ok');
+    box.textContent = `On target (${target}s budget)`;
+  } else if (diff > 0){
+    box.classList.add('over');
+    box.textContent = `+${diff.toFixed(1)}s over budget. Other scenes will tighten to fit 60s.`;
+  } else {
+    box.classList.add('under');
+    box.textContent = `${Math.abs(diff).toFixed(1)}s under budget. Other scenes may stretch slightly.`;
+  }
+  $('trimAutoBtn').style.display =
+    (Math.abs(trim.start-trim.autoStart) < 0.05 && Math.abs(trim.len-trim.autoLen) < 0.05) ? 'none' : 'block';
+}
+
+/* preview: plays only the kept window */
+function setupPreview(){
+  stopPreview();
+  if (currentItem.kind === 'video'){
+    pv = document.createElement('video');
+    pv.playsInline = true; pv.preload = 'auto';
+    pv.onerror = () => { $('trimSignal').textContent = 'The preview could not load this clip, but trimming still works from the bars.'; };
+    pv.onseeked = drawPreview;
+    pv.onloadeddata = drawPreview;
+    pvReady = new Promise(res => {
+      pv.onloadedmetadata = async () => { await fixDuration(pv); previewSeek(trim.start); res(); };
+      setTimeout(res, 4000);
+    });
+    pv.src = currentItem.url;
+  } else {
+    pvReady = Promise.resolve();
+    previewSeek(trim.start);
+  }
+}
+function previewSeek(t){
+  previewT = t;
+  if (pv){ try { pv.currentTime = Math.max(0, Math.min(t, (isFinite(pv.duration) ? pv.duration : currentItem.duration) - 0.05)); } catch(e){} }
+  else drawPreview();
+}
+function drawPreview(){
+  const c = $('trimPreview');
+  if (!c) return;
+  const g = c.getContext('2d');
+  g.fillStyle = '#000'; g.fillRect(0, 0, c.width, c.height);
+  if (currentItem.kind === 'synthetic') drawSynthetic(g, c.width, c.height, currentScene, previewT, currentItem);
+  else if (pv && pv.readyState >= 2 && pv.videoWidth) drawCover(g, pv, pv.videoWidth, pv.videoHeight, c.width, c.height, 1);
+  g.fillStyle = 'rgba(0,0,0,0.55)'; g.fillRect(6, 6, 58, 20);
+  g.fillStyle = '#F5F2EA'; g.font = '11px monospace'; g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText(previewT.toFixed(1) + 's', 12, 16);
+}
+async function previewToggle(){
+  if (pvPlaying){ stopPlayback(); previewSeek(trim.start); return; }
+  pvPlaying = true;
+  $('trimPlayBtn').textContent = 'Loading...';
+  await pvReady;
+  if (!pvPlaying) return;
+  $('trimPlayBtn').textContent = '❚❚ Pause';
+  const t0 = trim.start, end = trim.start + trim.len;
+  const startPerf = performance.now();
+  if (pv){ pv.currentTime = t0; pv.play().catch(()=>{}); }
+  const tick = () => {
+    if (!pvPlaying) return;
+    const t = pv ? pv.currentTime : t0 + (performance.now()-startPerf)/1000;
+    previewT = t;
+    drawPreview();
+    if (t >= end - 0.02){ stopPlayback(); previewSeek(trim.start); return; }
+    pvRaf = requestAnimationFrame(tick);
+  };
+  pvRaf = requestAnimationFrame(tick);
+}
+function stopPlayback(){
+  pvPlaying = false;
+  cancelAnimationFrame(pvRaf);
+  if (pv) pv.pause();
+  const b = $('trimPlayBtn');
+  if (b) b.textContent = '▶ Preview window';
+}
+function stopPreview(){
+  stopPlayback();
+  if (pv){ pv.removeAttribute('src'); try { pv.load(); } catch(e){} pv = null; }
+}
+
+function attachTrimDrag(){
+  const track = $('trimTrack');
+  let drag = null;
+  track.addEventListener('pointerdown', e => {
+    const kind = e.target.dataset && e.target.dataset.drag;
+    if (!kind) return;
+    e.preventDefault();
+    stopPlayback();
+    track.setPointerCapture(e.pointerId);
+    drag = {kind, x:e.clientX, start:trim.start, len:trim.len, w:track.getBoundingClientRect().width, min:Math.min(MIN_CLIP, trim.raw)};
+  });
+  track.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dSec = (e.clientX - drag.x) / drag.w * trim.raw;
+    if (drag.kind === 'move'){
+      trim.start = Math.min(trim.raw - drag.len, Math.max(0, drag.start + dSec));
+      trim.len = drag.len;
+    } else if (drag.kind === 'l'){
+      const end = drag.start + drag.len;
+      const ns = Math.min(end - drag.min, Math.max(0, drag.start + dSec));
+      trim.start = ns; trim.len = end - ns;
+    } else if (drag.kind === 'r'){
+      trim.start = drag.start;
+      trim.len = Math.min(trim.raw - drag.start, Math.max(drag.min, drag.len + dSec));
+    }
+    trim.start = Math.round(trim.start*10)/10;
+    trim.len = Math.round(trim.len*10)/10;
+    renderTrim();
+    if (!seekQueued){
+      seekQueued = true;
+      requestAnimationFrame(() => { seekQueued = false; previewSeek(drag && drag.kind === 'r' ? trim.start + trim.len - 0.1 : trim.start); });
+    }
+  });
+  const end = () => { drag = null; };
+  track.addEventListener('pointerup', end);
+  track.addEventListener('pointercancel', end);
+}
+
+function resetTrim(){
+  trim.start = trim.autoStart;
+  trim.len = trim.autoLen;
+  renderTrim();
+  previewSeek(trim.start);
+}
+function confirmTrim(){
+  stopPreview();
+  clips[currentScene.id] = {items:[currentItem], trim:{start:trim.start, len:trim.len, raw:trim.raw}};
+  completeScene(currentScene.id,
+    trim.len >= trim.raw - 0.05 ? `Kept all ${trim.raw.toFixed(1)}s` : `Kept ${trim.len.toFixed(1)}s of ${trim.raw.toFixed(1)}s`);
+}
+function retakeFromTrim(){
+  stopPreview();
+  openCapture(currentScene.id);
+}
+
+/* =====================================================================
+   DRAWING HELPERS
+   ===================================================================== */
+function drawCover(g, src, sw, sh, dw, dh, zoom){
+  const z = zoom || 1;
+  const scale = Math.max(dw/sw, dh/sh) * z;
+  const w = sw*scale, h = sh*scale;
+  g.drawImage(src, (dw-w)/2, (dh-h)/2, w, h);
+}
+function rr(g, x, y, w, h, r){
+  g.beginPath();
+  g.moveTo(x+r, y); g.arcTo(x+w, y, x+w, y+h, r); g.arcTo(x+w, y+h, x, y+h, r);
+  g.arcTo(x, y+h, x, y, r); g.arcTo(x, y, x+w, y, r); g.closePath();
+}
+function wrapText(g, text, x, y, maxW, lineH){
+  const words = String(text).split(' ');
+  let line = '', n = 0;
+  for (const w of words){
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > maxW && line){ g.fillText(line, x, y + n*lineH); line = w; n++; }
+    else line = test;
+  }
+  if (line){ g.fillText(line, x, y + n*lineH); n++; }
+  return n;
+}
+function loadImage(url){
+  return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = url; });
+}
+const DISPLAY = "Anton, Impact, 'Arial Narrow', sans-serif";
+const MONO = "'Space Mono', 'Courier New', monospace";
+const BODY = "Manrope, system-ui, sans-serif";
+
+/* stand-in picture for sample footage */
+function drawSynthetic(g, w, h, scene, t, item){
+  const hue = {2:200, 3:270, 3.5:45, 4:285, 5:350, 6:150, 7:30}[scene.id] || 220;
+  const grad = g.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, `hsl(${hue},55%,24%)`);
+  grad.addColorStop(1, `hsl(${(hue+50)%360},60%,12%)`);
+  g.fillStyle = grad; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 5; i++){
+    const x = w*(0.15+0.18*i) + Math.sin(t*0.9+i)*w*0.06;
+    const y = h*(0.2+0.14*i) + Math.cos(t*0.7+i*2)*h*0.03;
+    g.fillStyle = `hsla(${hue+i*18},70%,60%,0.10)`;
+    g.beginPath(); g.arc(x, y, w*(0.10+0.03*i), 0, 7); g.fill();
+  }
+  if (scene.id === 5){
+    g.strokeStyle = 'rgba(255,255,255,0.35)'; g.lineWidth = Math.max(2, w*0.012);
+    g.beginPath();
+    for (let x = 0; x <= w; x += Math.max(4, w/60)){
+      const y = h*0.66 + Math.sin(x*0.012*(720/w)+t*4)*h*0.07*(0.6+0.4*Math.sin(t*0.8));
+      if (x === 0) g.moveTo(x, y); else g.lineTo(x, y);
+    }
+    g.stroke();
+  }
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.font = `${w*0.24}px serif`; g.fillStyle = '#fff';
+  g.fillText(scene.icon || '🎬', w/2, h*0.40 + Math.sin(t*2)*h*0.01);
+  g.font = `${w*0.075}px ${DISPLAY}`; g.fillStyle = '#F5F2EA';
+  g.fillText(sceneLabel(scene).toUpperCase(), w/2, h*0.55);
+  g.font = `${w*0.03}px ${MONO}`; g.fillStyle = 'rgba(245,242,234,0.7)';
+  g.fillText(`SAMPLE FOOTAGE  ${t.toFixed(1)}s`, w/2, h*0.61);
+  const sp = item && item.analysis && item.analysis.speech;
+  if (sp && t >= sp.start && t <= sp.end){
+    for (let i = 0; i < 9; i++){
+      const bh = h*0.03*(0.4 + Math.abs(Math.sin(t*9+i*1.7)));
+      g.fillStyle = '#9B8CFF';
+      g.fillRect(w*0.3 + i*w*0.05, h*0.69 - bh/2, w*0.03, bh);
+    }
+  }
+}
+
+/* ---------- intro bumper, four styles ---------- */
+function drawIntro(g, w, h, t, style){
+  const bgs = {marquee:['#2A1B3D','#120B1E'], launch:['#0B1530','#05070F'], classic:['#1C1C1C','#080808'], neon:['#140A28','#05030A']};
+  const bg = bgs[style] || bgs.marquee;
+  const grad = g.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, bg[0]); grad.addColorStop(1, bg[1]);
+  g.fillStyle = grad; g.fillRect(0, 0, w, h);
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  const a = Math.min(1, Math.max(0, (t-0.5)/0.5));
+  const title = 'SPACE MOUNTAIN';
+  if (style === 'marquee'){
+    const x0 = w*0.1, y0 = h*0.3, bw = w*0.8, bh = h*0.3;
+    g.strokeStyle = 'rgba(245,185,66,0.35)'; g.lineWidth = 6; rr(g, x0, y0, bw, bh, 28); g.stroke();
+    const per = 26, perim = 2*(bw+bh);
+    for (let i = 0; i < per; i++){
+      let d = (i/per)*perim, x, y;
+      if (d < bw){ x = x0+d; y = y0; } else if (d < bw+bh){ x = x0+bw; y = y0+(d-bw); }
+      else if (d < 2*bw+bh){ x = x0+bw-(d-bw-bh); y = y0+bh; } else { x = x0; y = y0+bh-(d-2*bw-bh); }
+      const on = (i + Math.floor(t*8)) % 2 === 0;
+      g.fillStyle = on ? '#FFD36E' : 'rgba(245,185,66,0.25)';
+      g.beginPath(); g.arc(x, y, 9, 0, 7); g.fill();
+    }
+    g.save(); g.globalAlpha = a; g.translate(w/2, h*0.45); const s = 0.9+0.1*a; g.scale(s, s);
+    g.shadowColor = 'rgba(245,185,66,0.8)'; g.shadowBlur = 30;
+    g.fillStyle = '#F5B942'; g.font = `${w*0.12}px ${DISPLAY}`; g.fillText(title, 0, 0);
+    g.shadowBlur = 0; g.font = `${w*0.036}px ${MONO}`; g.fillStyle = '#F5F2EA'; g.fillText('TOMORROWLAND', 0, w*0.1);
+    g.restore();
+  } else if (style === 'launch'){
+    if (t < 1.8){
+      const n = 3 - Math.floor(t/0.6), p = (t%0.6)/0.6;
+      g.strokeStyle = '#4CC9F0'; g.lineWidth = 14; g.beginPath(); g.arc(w/2, h*0.45, w*0.22, -Math.PI/2, -Math.PI/2 + p*Math.PI*2); g.stroke();
+      g.fillStyle = '#F5F2EA'; g.font = `${w*0.3}px ${DISPLAY}`; g.fillText(String(n), w/2, h*0.45);
+    } else {
+      const k = Math.min(1, (t-1.8)/0.5);
+      g.fillStyle = `rgba(255,255,255,${Math.max(0, 0.9-k*1.6)})`; g.fillRect(0, 0, w, h);
+      g.save(); g.translate(w/2, h*0.45); g.scale(0.7+0.3*k, 0.7+0.3*k);
+      g.fillStyle = '#F5F2EA'; g.font = `${w*0.12}px ${DISPLAY}`; g.fillText(title, 0, 0);
+      g.fillStyle = '#4CC9F0'; g.font = `${w*0.036}px ${MONO}`; g.fillText('TOMORROWLAND', 0, w*0.1);
+      g.restore();
+    }
+  } else if (style === 'classic'){
+    const clap = t < 1.0 ? 0.35*(1-t) : 0;
+    g.fillStyle = '#F5F2EA'; g.fillRect(w*0.12, h*0.34, w*0.76, h*0.2);
+    g.save(); g.translate(w*0.12, h*0.34); g.rotate(-clap);
+    for (let i = 0; i < 8; i++){ g.fillStyle = i%2 ? '#F5F2EA' : '#111'; g.fillRect(i*w*0.095, -h*0.05, w*0.095, h*0.05); }
+    g.restore();
+    g.fillStyle = '#111'; g.font = `${w*0.05}px ${MONO}`; g.textAlign = 'left';
+    g.fillText('SCENECUE', w*0.16, h*0.39); g.fillText('ROLL 1   TAKE 1', w*0.16, h*0.44);
+    g.textAlign = 'center';
+    g.save(); g.globalAlpha = a; g.fillStyle = '#F5F2EA'; g.font = `${w*0.11}px ${DISPLAY}`; g.fillText(title, w/2, h*0.64); g.restore();
+  } else {
+    const glow = 20 + 10*Math.sin(t*6);
+    g.strokeStyle = '#FF3CAC'; g.lineWidth = 8; g.shadowColor = '#FF3CAC'; g.shadowBlur = glow;
+    g.beginPath(); for (let x = 0; x <= w; x += 12){ const y = h*0.72 + Math.sin(x*0.02 + t*5)*h*0.04; if (x) g.lineTo(x, y); else g.moveTo(x, y); } g.stroke();
+    g.save(); g.globalAlpha = a; g.fillStyle = '#EAFBFF'; g.shadowColor = '#4CC9F0'; g.shadowBlur = glow*1.5;
+    g.font = `${w*0.12}px ${DISPLAY}`; g.fillText(title, w/2, h*0.42);
+    g.shadowBlur = 0; g.fillStyle = '#FF3CAC'; g.font = `${w*0.036}px ${MONO}`; g.fillText('TOMORROWLAND', w/2, h*0.42 + w*0.1);
+    g.restore(); g.shadowBlur = 0;
+  }
+}
+
+function drawEndCard(g, w, h, t){
+  const grad = g.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, '#1E1A28'); grad.addColorStop(1, '#0E0C14');
+  g.fillStyle = grad; g.fillRect(0, 0, w, h);
+  const a = Math.min(1, t/0.4);
+  g.save(); g.globalAlpha = a;
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillStyle = '#F5B942'; g.font = `${w*0.034}px ${MONO}`; g.fillText('BEFORE YOU GO', w/2, h*0.2);
+  g.fillStyle = '#F5F2EA'; g.font = `${w*0.1}px ${DISPLAY}`; g.fillText('SPACE MOUNTAIN', w/2, h*0.26);
+  const rows = [['HEIGHT MINIMUM', rideVal('height')], ['PARK HOURS TODAY', rideVal('hours')], ['LOCKERS', rideVal('lockers')]];
+  let y = h*0.34;
+  rows.forEach(r => {
+    g.fillStyle = 'rgba(255,255,255,0.07)'; rr(g, w*0.09, y, w*0.82, h*0.15, 22); g.fill();
+    g.strokeStyle = 'rgba(245,185,66,0.4)'; g.lineWidth = 2; g.stroke();
+    g.textAlign = 'left';
+    g.fillStyle = '#A9A3BB'; g.font = `${w*0.03}px ${MONO}`; g.fillText(r[0], w*0.13, y + h*0.035);
+    g.fillStyle = '#F5F2EA'; g.font = `700 ${w*0.052}px ${BODY}`;
+    g.textBaseline = 'alphabetic';
+    wrapText(g, r[1], w*0.13, y + h*0.085, w*0.74, w*0.062);
+    g.textBaseline = 'middle';
+    y += h*0.175;
+  });
+  g.textAlign = 'center';
+  g.fillStyle = 'rgba(245,242,234,0.5)'; g.font = `${w*0.03}px ${MONO}`; g.fillText('MADE WITH SCENECUE', w/2, h*0.92);
+  g.restore();
+}
+
+function drawChip(g, x, y, text, w){
+  g.font = `${w*0.034}px ${MONO}`; g.textAlign = 'left'; g.textBaseline = 'middle';
+  const tw = g.measureText(text).width + w*0.05;
+  g.fillStyle = 'rgba(8,6,12,0.78)'; rr(g, x, y, tw, w*0.075, 14); g.fill();
+  g.strokeStyle = 'rgba(255,255,255,0.18)'; g.lineWidth = 2; g.stroke();
+  g.fillStyle = '#F5F2EA'; g.fillText(text, x + w*0.025, y + w*0.0375);
+}
+
+/* =====================================================================
+   SAMPLE FOOTAGE (for testing without a camera)
+   ===================================================================== */
+const SAMPLE_SPEECH = {2:{start:1.0,end:4.8}, 4:{start:1.2,end:4.0}, 6:{start:1.0,end:3.0}, 7:{start:1.2,end:4.6}};
+
+async function samplePhoto(scene, i, n){
+  const c = document.createElement('canvas'); c.width = 540; c.height = 960;
+  const g = c.getContext('2d');
+  drawSynthetic(g, c.width, c.height, scene, i*3, null);
+  g.textAlign = 'center'; g.fillStyle = '#F5B942'; g.font = `${c.width*0.05}px ${MONO}`;
+  g.fillText(`PHOTO ${i+1} OF ${n}`, c.width/2, c.height*0.68);
+  const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', 0.85));
+  return {kind:'image', blob, url:URL.createObjectURL(blob), sample:true};
+}
+async function makeSampleClip(scene){
+  if (scene.photoMax || scene.id === 3.5){
+    const n = scene.photoMax || 1;
+    const items = [];
+    for (let i = 0; i < n; i++) items.push(await samplePhoto(scene, i, n));
+    return {items, trim:null};
+  }
+  const raw = scene.id === 5 ? 40 : Math.round(Math.max(8, scene.dur*1.7)*10)/10;
+  const n = Math.ceil(raw/BIN);
+  const item = {kind:'synthetic', duration:raw, sample:true, mime:'sample'};
+  item.analysis = {audioBins:sampleActivity(n, scene.id), motionBins:null, speech:SAMPLE_SPEECH[scene.id] || null, n, sample:true};
+  const auto = computeAuto(item, scene);
+  return {items:[item], trim:{start:auto.autoStart, len:auto.autoLen, raw}};
+}
+async function useSampleForScene(){
+  const c = await makeSampleClip(currentScene);
+  clips[currentScene.id] = c;
+  completeScene(currentScene.id, `${currentScene.title}: sample footage added`);
+}
+async function fillSamples(){
+  showToast('Generating sample footage...');
+  for (const s of scenes){
+    if (!s.capturable || state[s.id] === 'done') continue;
+    clips[s.id] = await makeSampleClip(s);
+    state[s.id] = 'done';
+  }
+  suppressDone = false;
+  plan = null;
+  invalidateResult();
+  renderList();
+}
+
+/* =====================================================================
+   PLAN: the 60-second budget solver
+   ===================================================================== */
+function buildSegments(){
+  const segs = [{key:'intro', label:'Intro bumper', cls:'locked', want:3, min:3, max:3}];
+  for (const s of scenes){
+    if (s.id === 1) continue;
+    const c = clips[s.id];
+    if (!c || !c.items.length) continue;
+    const seg = {key:s.id, scene:s, label:sceneLabel(s), cls:s.cls, clip:c};
+    if (c.items[0].kind === 'image'){
+      const n = c.items.length;
+      seg.photo = true;
+      seg.min = n*LEGIBLE; seg.max = n*3.5;
+      seg.want = Math.min(Math.max(s.dur, seg.min), seg.max);
+    } else {
+      const tr = c.trim, avail = tr.raw - tr.start;
+      if (s.cls === 'narr'){ seg.want = Math.min(tr.len, avail); seg.min = seg.want; seg.max = seg.want; }
+      else if (s.cls === 'floor'){ seg.min = Math.min(s.floor, avail); seg.want = Math.min(Math.max(tr.len, seg.min), avail); seg.max = avail; }
+      else { seg.want = Math.min(tr.len, avail); seg.min = Math.min(LEGIBLE, seg.want); seg.max = avail; }
+    }
+    segs.push(seg);
+  }
+  segs.push({key:'end', label:'End card', cls:'locked', want:3, min:3, max:3});
+  return segs;
+}
+
+// order: locked scenes reserve, narration scenes claim what the speech needs,
+// the payload keeps its floor, elastic scenes give or take the rest
+function solve(segs, budget){
+  const notes = [];
+  segs.forEach(s => { s.alloc = Math.min(s.max, Math.max(s.min, s.want)); });
+  const total = () => segs.reduce((a,s) => a + s.alloc, 0);
+  let t = total();
+  if (t > budget + 1e-6){
+    let over = t - budget;
+    for (const cls of ['elastic','floor']){
+      const pool = segs.filter(s => s.cls === cls);
+      const room = pool.reduce((a,s) => a + (s.alloc - s.min), 0);
+      if (room <= 1e-9) continue;
+      const take = Math.min(over, room);
+      pool.forEach(s => { s.alloc -= take * (s.alloc - s.min) / room; });
+      over -= take;
+      if (over <= 1e-6) break;
+    }
+    if (over > 1e-6) notes.push(`The cut is still ${over.toFixed(1)}s over 60s after tightening everything flexible. Trim a scene to fix it.`);
+  } else if (t < budget - 1e-6){
+    let spare = budget - t;
+    for (const cls of ['floor','elastic']){
+      const pool = segs.filter(s => s.cls === cls);
+      const room = pool.reduce((a,s) => a + (s.max - s.alloc), 0);
+      if (room <= 1e-9) continue;
+      const give = Math.min(spare, room);
+      pool.forEach(s => { s.alloc += give * (s.max - s.alloc) / room; });
+      spare -= give;
+      if (spare <= 1e-6) break;
+    }
+    if (spare > 1e-6) notes.push(`The cut runs ${(budget-spare).toFixed(1)}s because the footage ran out before 60s.`);
+  }
+  const exact = segs.reduce((a,s) => a + s.alloc, 0);
+  segs.forEach(s => { s.alloc = Math.round(s.alloc*10)/10; });
+  // rounding each scene can leave the total a tenth or two off, so nudge the most flexible one
+  let diff = Math.round((Math.round(exact*10)/10 - segs.reduce((a,s) => a + s.alloc, 0))*10)/10;
+  if (Math.abs(diff) >= 0.05){
+    const flex = segs.filter(s => s.cls === 'elastic' || s.cls === 'floor');
+    flex.sort((x,y) => diff > 0 ? (y.max - y.alloc) - (x.max - x.alloc) : (y.alloc - y.min) - (x.alloc - x.min));
+    const s = flex[0];
+    if (s) s.alloc = Math.round(Math.min(s.max, Math.max(s.min, s.alloc + diff))*10)/10;
+  }
+  return notes;
+}
+
+function makePlan(){
+  const segs = buildSegments();
+  const notes = solve(segs, BUDGET);
+  let t = 0;
+  segs.forEach(sg => {
+    sg.start = t; sg.end = t + sg.alloc; t = sg.end;
+    if (sg.clip && !sg.photo){
+      const tr = sg.clip.trim;
+      sg.win = {start:tr.start, len:Math.min(sg.alloc, tr.raw - tr.start)};
+      const sp = sg.clip.items[0].analysis && sg.clip.items[0].analysis.speech;
+      if (sp){
+        const a = Math.max(0, sp.start - sg.win.start), b = Math.min(sg.win.len, sp.end - sg.win.start);
+        if (b > a) sg.speech = {a, b};
+      }
+    }
+  });
+  return {segs, total:Math.round(t*10)/10, notes};
+}
+
+const CLS_TAG = {locked:['LOCKED','time'], narr:['NARRATION','deferred'], floor:['PAYLOAD','gold'], elastic:['ELASTIC','ok']};
+
+function renderDone(){
+  plan = makePlan();
+  const heightOk = rideData.find(f => f.key === 'height').confirmed;
+  $('gateCard').style.display = heightOk ? 'none' : 'block';
+  $('assembleBtn').disabled = !heightOk || assembling;
+  $('assembleBtn').style.opacity = (!heightOk || assembling) ? 0.45 : 1;
+
+  const rows = plan.segs.map(sg => {
+    const tag = CLS_TAG[sg.cls];
+    let note = '';
+    if (sg.cls === 'narr'){
+      const sp = sg.clip && sg.clip.items[0].analysis && sg.clip.items[0].analysis.speech;
+      note = sp ? `Speech ${(sp.end-sp.start).toFixed(1)}s, so the hold is ${sg.alloc.toFixed(1)}s` : 'No speech found, so the budget length was used';
+    } else if (sg.photo){
+      note = `${sg.clip.items.length} photo${sg.clip.items.length>1?'s':''}, ${(sg.alloc/sg.clip.items.length).toFixed(1)}s each`;
+    } else if (sg.cls === 'floor'){
+      note = `Floor ${sg.scene.floor}s, uses ${sg.win.len.toFixed(1)}s of your ${sg.clip.trim.raw.toFixed(1)}s`;
+    }
+    return `<div class="plan-row"><span class="plan-name">${sg.label}${note ? `<span class="plan-note">${note}</span>` : ''}</span>
+      <span class="tag ${tag[1]}">${tag[0]}</span><span class="plan-dur">${sg.alloc.toFixed(1)}s</span></div>`;
+  }).join('');
+  $('planCard').innerHTML = rows +
+    `<div class="plan-row plan-total"><span class="plan-name">Total</span><span class="plan-dur" style="color:var(--gold)">${plan.total.toFixed(1)}s</span></div>` +
+    plan.notes.map(n => `<div class="plan-warn">${n}</div>`).join('');
+
+  if (resultUrl){ $('resultCard').style.display = 'block'; }
+}
+function editScenesFromGate(){ openRideData(); }
+
+/* =====================================================================
+   MUSIC (synthesized in the browser, no audio files)
+   ===================================================================== */
+function note(actx, out, type, f, t, dur, vol, att, rel){
+  const o = actx.createOscillator(), g = actx.createGain();
+  o.type = type; o.frequency.value = f;
+  const a = Math.min(att, dur*0.5);
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t + a);
+  g.gain.setValueAtTime(vol, t + dur);
+  g.gain.linearRampToValueAtTime(0, t + dur + rel);
+  o.connect(g); g.connect(out);
+  o.start(t); o.stop(t + dur + rel + 0.05);
+}
+function scheduleMusic(actx, out, segs, total, T0){
+  const beat = 60/104;
+  const chords = [[57,60,64],[53,57,60],[48,52,55],[55,59,62]];
+  const hz = m => 440*Math.pow(2, (m-69)/12);
+  const bars = Math.ceil(total/(beat*4)) + 1;
+  const arp = [0,1,2,1,0,2,1,2];
+  for (let b = 0; b < bars; b++){
+    const ch = chords[b%4], t0 = T0 + b*beat*4;
+    ch.forEach(m => note(actx, out, 'triangle', hz(m-12), t0, beat*4, 0.05, 0.4, 1.0));
+    for (let k = 0; k < 8; k++) note(actx, out, 'sine', hz(ch[arp[k]]+12), t0 + k*beat/2, beat*0.45, 0.06, 0.01, 0.2);
+  }
+  // ducking: music drops under speech (with the lead and tail) and eases off under the ride
+  const ev = [];
+  segs.forEach(sg => {
+    if (sg.cls === 'floor') ev.push({a:sg.start, b:sg.end, level:0.45});
+    if (sg.speech) ev.push({a:sg.start+sg.speech.a-LEAD, b:sg.start+sg.speech.b+TAIL, level:0.18});
+  });
+  ev.sort((x,y) => x.a - y.a);
+  const gp = out.gain;
+  gp.setValueAtTime(1, T0);
+  let tl = T0;
+  ev.forEach(e => {
+    const a = T0 + Math.max(0, e.a), b = T0 + Math.min(total, e.b);
+    if (a - 0.15 <= tl || b <= a) return;
+    gp.setValueAtTime(1, a - 0.15);
+    gp.linearRampToValueAtTime(e.level, a);
+    gp.setValueAtTime(e.level, b);
+    gp.linearRampToValueAtTime(1, b + 0.3);
+    tl = b + 0.3;
+  });
+  const fs = Math.max(T0 + total - 1.2, tl);
+  if (fs < T0 + total){ gp.setValueAtTime(1, fs); gp.linearRampToValueAtTime(0, T0 + total); }
+}
+
+/* =====================================================================
+   ASSEMBLY: real-time render to a video file
+   ===================================================================== */
+function once(el, ev, ms){
+  return new Promise(res => { let d = false; const f = () => { if (!d){ d = true; res(); } }; el.addEventListener(ev, f, {once:true}); setTimeout(f, ms || 3000); });
+}
+async function ensureFonts(){
+  try {
+    await Promise.race([
+      Promise.all([document.fonts.load('40px Anton'), document.fonts.load("20px 'Space Mono'"), document.fonts.load('700 20px Manrope')]),
+      new Promise(r => setTimeout(r, 2000))
+    ]);
+  } catch(e){}
+}
+
+async function assemble(){
+  if (assembling || !plan) return;
+  if (!rideData.find(f => f.key === 'height').confirmed){ showToast('Confirm the height minimum first.'); return; }
+  assembling = true;
+  const segs = plan.segs, total = plan.total;
+  $('assembleBtn').disabled = true; $('assembleBtn').style.opacity = 0.45;
+  $('resultCard').style.display = 'none';
+  $('renderCard').style.display = 'block';
+  $('renderStatus').textContent = 'Preparing clips...';
+  $('renderFill').style.width = '0%';
+  if (resultUrl){ URL.revokeObjectURL(resultUrl); resultUrl = null; }
+  const wall0 = performance.now();
+
+  try {
+    await ensureFonts();
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const actx = new AC();
+    await actx.resume();
+    const dest = actx.createMediaStreamDestination();
+    const musicGain = actx.createGain();
+    musicGain.connect(dest);
+
+    for (const sg of segs){
+      sg.rt = {};
+      if (sg.photo){
+        sg.rt.imgs = await Promise.all(sg.clip.items.map(it => loadImage(it.url)));
+      } else if (sg.clip && sg.clip.items[0].kind === 'video'){
+        const v = document.createElement('video');
+        v.playsInline = true; v.preload = 'auto';
+        v.src = sg.clip.items[0].url;
+        await once(v, 'loadedmetadata', 4000);
+        await fixDuration(v);
+        v.currentTime = sg.win.start;
+        await once(v, 'seeked', 2500);
+        const src = actx.createMediaElementSource(v);
+        const g = actx.createGain(); g.gain.value = 0;
+        src.connect(g); g.connect(dest);
+        sg.rt = {v, g, vol: sg.cls === 'floor' ? 0.9 : 1};
+      }
+    }
+
+    const canvas = $('renderCanvas');
+    canvas.width = OUT_W; canvas.height = OUT_H;
+    const g2 = canvas.getContext('2d');
+    drawFrame(g2, segs, 0);
+
+    const vstream = canvas.captureStream(30);
+    const stream = new MediaStream([...vstream.getVideoTracks(), ...dest.stream.getAudioTracks()]);
+    const mime = pickMime(true);
+    const mr = new MediaRecorder(stream, mime ? {mimeType:mime, videoBitsPerSecond:4000000, audioBitsPerSecond:128000} : undefined);
+    const chunks = [];
+    mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    const stopped = new Promise(res => { mr.onstop = res; });
+    mr.onerror = e => console.warn('recorder error', e && e.error ? e.error.message : e);
+    vstream.getVideoTracks()[0].onended = () => console.warn('video track ended early');
+
+    const T0 = actx.currentTime + 0.2;
+    scheduleMusic(actx, musicGain, segs, total, T0);
+    mr.start(500);
+    const tStart = performance.now() + 200;
+
+    await new Promise(resolve => {
+      const frame = () => {
+        const t = (performance.now() - tStart) / 1000;
+        if (t >= total + 0.3){ resolve(); return; }
+        const tt = Math.max(0, Math.min(total - 0.001, t));
+        drawFrame(g2, segs, tt);
+        for (const sg of segs){
+          const r = sg.rt;
+          if (!r || !r.v) continue;
+          if (!r.started && t >= sg.start && t < sg.end){ r.started = true; r.v.play().catch(()=>{}); r.g.gain.value = r.vol; }
+          if (r.started && !r.stopped && t >= sg.end){ r.stopped = true; r.v.pause(); r.g.gain.value = 0; }
+        }
+        $('renderFill').style.width = Math.min(100, Math.max(0, t/total*100)) + '%';
+        $('renderStatus').textContent = `Rendering in real time: ${Math.max(0,t).toFixed(0)}s of ${total.toFixed(0)}s`;
+        requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    });
+
+    mr.stop();
+    await stopped;
+    segs.forEach(sg => { if (sg.rt && sg.rt.v){ sg.rt.v.pause(); sg.rt.v.removeAttribute('src'); } });
+    try { actx.close(); } catch(e){}
+
+    const type = mr.mimeType || mime || 'video/webm';
+    const blob = new Blob(chunks, {type});
+    resultUrl = URL.createObjectURL(blob);
+    const ext = type.includes('mp4') ? 'mp4' : 'webm';
+    const rv = $('resultVideo');
+    rv.src = resultUrl;
+    await once(rv, 'loadedmetadata', 3000);
+    await fixDuration(rv);
+    try { rv.currentTime = 0; } catch(e){}
+    const secs = (performance.now() - wall0) / 1000;
+    $('resultMeta').textContent = `${total.toFixed(1)}s video, ${OUT_W}x${OUT_H}, ${(blob.size/1048576).toFixed(1)} MB ${ext}. Rendered in ${secs.toFixed(0)}s. The browser records in real time, so this takes as long as the video. The phone app would encode on the device much faster.`;
+    const dl = $('downloadLink');
+    dl.href = resultUrl; dl.download = `scenecue-space-mountain.${ext}`;
+    $('renderCard').style.display = 'none';
+    $('resultCard').style.display = 'block';
+    window.__lastResult = {size:blob.size, type, seconds:secs, total};
+  } catch(err){
+    console.error(err);
+    $('renderStatus').textContent = 'Something went wrong while rendering: ' + (err && err.message ? err.message : err);
+  } finally {
+    assembling = false;
+    $('assembleBtn').disabled = false; $('assembleBtn').style.opacity = 1;
+    $('assembleBtn').textContent = '↻ Assemble again';
+  }
+}
+
+function drawFrame(g, segs, t){
+  const w = OUT_W, h = OUT_H;
+  let sg = segs[segs.length-1];
+  for (const s of segs){ if (t >= s.start && t < s.end){ sg = s; break; } }
+  const local = t - sg.start;
+  g.fillStyle = '#000'; g.fillRect(0, 0, w, h);
+  if (sg.key === 'intro') drawIntro(g, w, h, local, selectedIntro);
+  else if (sg.key === 'end') drawEndCard(g, w, h, local);
+  else if (sg.photo){
+    const n = sg.rt.imgs.length, per = sg.alloc / n;
+    const idx = Math.min(n-1, Math.floor(local/per)), lt = local - idx*per;
+    const im = sg.rt.imgs[idx];
+    drawCover(g, im, im.naturalWidth, im.naturalHeight, w, h, 1 + 0.1*(lt/per));
+  } else if (sg.clip.items[0].kind === 'synthetic'){
+    drawSynthetic(g, w, h, sg.scene, sg.win.start + local, sg.clip.items[0]);
+  } else if (sg.rt.v && sg.rt.v.readyState >= 2 && sg.rt.v.videoWidth){
+    drawCover(g, sg.rt.v, sg.rt.v.videoWidth, sg.rt.v.videoHeight, w, h, 1);
+  }
+  // overlays built from the confirmed ride info
+  if (sg.key === 5){
+    drawChip(g, w*0.05, h*0.04, `${rideVal('speed')}  ·  opened ${rideVal('opened')}`, w);
+  }
+  if (sg.key === 3.5){
+    drawChip(g, w*0.05, h*0.86, `Height minimum: ${rideVal('height')}`, w);
+  }
+  // quick dip from black at the start of each scene
+  if (sg.key !== 'intro' && local < 0.18){
+    g.fillStyle = `rgba(0,0,0,${0.7*(1 - local/0.18)})`; g.fillRect(0, 0, w, h);
+  }
 }
 
 function restart(){
   scenes.forEach(s => state[s.id] = s.type === "reused" ? "done" : "pending");
+  Object.values(clips).forEach(c => (c.items || []).forEach(it => { if (it.url) URL.revokeObjectURL(it.url); }));
+  clips = {}; pending = []; plan = null; suppressDone = false;
+  if (resultUrl){ URL.revokeObjectURL(resultUrl); resultUrl = null; }
+  $('resultCard').style.display = 'none';
+  $('renderCard').style.display = 'none';
+  $('assembleBtn').textContent = '▶ Assemble video';
   goList();
 }
 
+function invalidateResult(){
+  if (resultUrl){ URL.revokeObjectURL(resultUrl); resultUrl = null; }
+  const rc = $('resultCard'); if (rc) rc.style.display = 'none';
+  const ab = $('assembleBtn'); if (ab) ab.textContent = '▶ Assemble video';
+}
+
+function showToast(text){
+  $('toastText').textContent = text;
+  const t = $('toast');
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 1800);
+}
+
+attachTrimDrag();
 renderList();
+
 </script>
 
 </body>
